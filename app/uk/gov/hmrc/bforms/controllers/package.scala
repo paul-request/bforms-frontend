@@ -14,18 +14,14 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.bforms.service
+package uk.gov.hmrc.bforms
 
-import uk.gov.hmrc.bforms.models.LandfillTaxDetails
+import play.api.mvc.{AnyContent, Request, Result}
+import uk.gov.hmrc.play.frontend.auth.AuthContext
 
 import scala.concurrent.Future
 
-
-object TaxFormSubmission extends TaxFormSubmission
-
-case class SubmissionResult(errorMessage : Option[String], submissionAcknowledgement : Option[String])
-
-trait TaxFormSubmission {
-
-  def submitTaxForm(formData: LandfillTaxDetails) : Future[SubmissionResult] = Future.successful(SubmissionResult(None, Some("KAKAKAKAXXX")))
+package object controllers {
+  type AsyncUserRequest = AuthContext => Request[AnyContent] => Future[Result]
+  type UserRequest = AuthContext => Request[AnyContent] => Result
 }
