@@ -18,7 +18,7 @@ package uk.gov.hmrc.bforms.controllers
 
 import javax.inject.{Inject, Singleton}
 
-import uk.gov.hmrc.bforms.models.LandfillTaxDetails
+import uk.gov.hmrc.bforms.models.{LandfillTaxDetails, environmentalBody}
 import uk.gov.hmrc.bforms.service.{SubmissionResult, TaxFormSubmission}
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 
@@ -50,4 +50,13 @@ class LandfillTaxForm @Inject()(val messagesApi: MessagesApi)(implicit ec: Execu
           }
       )
   }
+
+/*  def addEnvironmentalBody(currentNumber: Int) = Action.async { implicit request =>
+Future.successful(increment(LandfillTaxDetails.form.forField()))
+  }
+
+  def increment(current: Seq[environmentalBody]): Seq[environmentalBody] ={
+    case current.seq => current.iterator
+  }*/
+
 }
