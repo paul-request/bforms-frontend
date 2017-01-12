@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.bforms.controllers
 
-import javax.inject.{Inject, Singleton}
+import javax.inject.Inject
 
 import uk.gov.hmrc.bforms.FrontendAuthConnector
 import uk.gov.hmrc.bforms.controllers.auth.BFormsAuth
@@ -29,7 +29,6 @@ import uk.gov.hmrc.play.frontend.controller.FrontendController
 import scala.concurrent.{ExecutionContext, Future}
 import play.api.i18n.{I18nSupport, MessagesApi}
 
-@Singleton
 class LandfillTaxForm @Inject()(val messagesApi: MessagesApi)(implicit ec: ExecutionContext)
   extends FrontendController with I18nSupport with BFormsAuth with Actions {
   self: BFormsAuth =>
