@@ -19,11 +19,10 @@ package uk.gov.hmrc.bforms.repositories
 import java.time.LocalDate
 import javax.inject.Inject
 
-import play.api.libs.functional.syntax._
 import com.google.inject.Singleton
 import play.api.libs.json.{JsValue, _}
 import reactivemongo.api.DB
-import uk.gov.hmrc.bforms.models.{BadDebtReliefClaimed, ConfirmEmailAddress, EitherLandfillTaxDetailsPersistenceMapStringString, EmailAddress, EnvironmentalBody1, EnvironmentalBody2, ExemptWaste, FirstName, GovernmentGatewayId, LandFillTaxDetailsPersistence, LandfillTaxDetails, LastName, LowerRateWaste, NameOfBusiness, OtherCredits, OverDeclarationsForThisPeriod, StandardRateWaste, Status, TaxCreditClaimedForEnvironment, TaxDueForThisPeriod, TelephoneNumber, UnderDeclarationsFromPreviousPeriod}
+import uk.gov.hmrc.bforms.models._
 import uk.gov.hmrc.mongo.ReactiveRepository
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -37,7 +36,7 @@ class LandFillTaxRepositoryImpl @Inject()(implicit db:DB) extends ReactiveReposi
 
   def store(form:Either[LandfillTaxDetails, Map[String, String]]) = {
     form.fold(
-       landfilltaxdetails => {
+      landfilltaxdetails => {
         val store = LandFillTaxDetailsPersistence(GovernmentGatewayId("Something"),
           FirstName(landfilltaxdetails.firstName),
           LastName(landfilltaxdetails.lastName),
@@ -55,8 +54,7 @@ class LandFillTaxRepositoryImpl @Inject()(implicit db:DB) extends ReactiveReposi
           StandardRateWaste(landfilltaxdetails.standardRateWaste),
           LowerRateWaste(landfilltaxdetails.lowerRateWaste),
           ExemptWaste(landfilltaxdetails.exemptWaste),
-          EnvironmentalBody1(landfilltaxdetails.environmentalBody1),
-          EnvironmentalBody2(landfilltaxdetails.environmentalBody2.getOrElse(0)),
+          form.environmentalBodies,
           EmailAddress(landfilltaxdetails.emailAddress.getOrElse("None")),
           ConfirmEmailAddress(landfilltaxdetails.confirmEmailAddress.getOrElse("None"))
         )
@@ -70,15 +68,15 @@ class LandFillTaxRepositoryImpl @Inject()(implicit db:DB) extends ReactiveReposi
         }
       },
       Map => {
-      insert(Right(Map)) map {
-        case r if r.ok =>
-          logger.info(s"map of a form in database")
-          Right(())
-        case r =>
-          logger.error(s"map not put into databse")
-          Left(r.message)
+        insert(Right(Map)) map {
+          case r if r.ok =>
+            logger.info(s"map of a form in database")
+            Right(())
+          case r =>
+            logger.error(s"map not put into databse")
+            Left(r.message)
+        }
       }
-    }
     )
   }
 
@@ -93,9 +91,58 @@ class LandFillTaxRepositoryImpl @Inject()(implicit db:DB) extends ReactiveReposi
   }
 }
 
+object LandFillTaxDetailsPersistence {
+
+  def apply(governmentGateway : GovernmentGatewayId,
+            firstName:FirstName,
+            lastName:LastName,
+            telephoneNumber:TelephoneNumber,
+            status: Status,
+            nameOfBusiness: NameOfBusiness,
+            accountingPeriodStartDate: LocalDate,
+            accountingPeriodEndDate: LocalDate,
+            taxDueForThisPeriod: TaxDueForThisPeriod,
+            underDeclarationsFromPreviousPeriod: UnderDeclarationsFromPreviousPeriod,
+            overDeclarationsForThisPeriod: OverDeclarationsForThisPeriod,
+            taxCreditClaimedForEnvironment: TaxCreditClaimedForEnvironment,
+            badDebtReliefClaimed: BadDebtReliefClaimed,
+            otherCredits: OtherCredits,
+            standardRateWaste: StandardRateWaste,
+            lowerRateWaste: LowerRateWaste,
+            exemptWaste: ExemptWaste,
+            environmentalBodies: Seq[EnvironmentalBody],
+            emailAddress: EmailAddress,
+            confirmEmailAddress: ConfirmEmailAddress) = {
+
+    new LandFillTaxDetailsPersistence(governmentGateway,
+      firstName,
+      lastName,
+      telephoneNumber,
+      status,
+      nameOfBusiness,
+      accountingPeriodStartDate,
+      accountingPeriodEndDate,
+      taxDueForThisPeriod,
+      underDeclarationsFromPreviousPeriod,
+      overDeclarationsForThisPeriod,
+      taxCreditClaimedForEnvironment,
+      badDebtReliefClaimed,
+      otherCredits,
+      standardRateWaste,
+      lowerRateWaste,
+      exemptWaste,
+      environmentalBodies,
+      emailAddress,
+      confirmEmailAddress)
+  }
+
+  val mongoFormat = Json.format[LandFillTaxDetailsPersistence]
+}
+
 trait LandFillTaxRepository {
 
   def store(form : Either[LandfillTaxDetails, Map[String, String]]) : Future[Either[String, Unit]]
 
   def get(registrationNumber : String) : Future[List[Either[LandFillTaxDetailsPersistence, Map[String, String]]]]
+
 }

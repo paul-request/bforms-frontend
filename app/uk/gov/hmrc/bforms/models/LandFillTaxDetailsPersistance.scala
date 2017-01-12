@@ -16,9 +16,15 @@
 
 package uk.gov.hmrc.bforms.models
 
+<<<<<<< HEAD
 import play.api.libs.json.{Format, JsError, JsResult, JsString, JsSuccess, JsValue, Json, _}
 import org.apache.commons.lang3.RandomStringUtils
+=======
+>>>>>>> a80ec9d30197b03c2f626baa557ddb04f9fff76f
 import java.time.LocalDate
+
+import org.apache.commons.lang3.RandomStringUtils
+import play.api.libs.json.{Format, JsError, JsResult, JsString, JsSuccess, JsValue, Json, _}
 
 /**
   * Created by daniel-connelly on 05/01/17.
@@ -40,8 +46,7 @@ case class LandFillTaxDetailsPersistence(ID : GovernmentGatewayId = GovernmentGa
                                          standardRateWaste: StandardRateWaste = new StandardRateWaste(""),
                                          lowerRateWaste: LowerRateWaste = new LowerRateWaste(""),
                                          exemptWaste: ExemptWaste = new ExemptWaste(""),
-                                         environmentalBody1: EnvironmentalBody1 = new EnvironmentalBody1(0),
-                                         environmentalBody2: EnvironmentalBody2 = new EnvironmentalBody2(Some(0)),
+                                         environmentalBody1: Seq[EnvironmentalBody] =  Seq(EnvironmentalBody("default" , 0)),
                                          emailAddress: EmailAddress = new EmailAddress(Some("")),
                                          confirmEmailAddress: ConfirmEmailAddress = new ConfirmEmailAddress(Some("")),
                                          datePersisted : LocalDate = LocalDate.now
@@ -49,13 +54,16 @@ case class LandFillTaxDetailsPersistence(ID : GovernmentGatewayId = GovernmentGa
 }
 
 class GovernmentGatewayId(val value:String) extends AnyVal
+
+case class EnvironmentalBodyPersistence(bodyName:BodyName, amount:Amount)
+
 class FirstName(val value:String) extends AnyVal
 class LastName(val value:String) extends AnyVal
 class TelephoneNumber(val value:String) extends AnyVal
 class Status (val value:String) extends AnyVal
 class NameOfBusiness(val value:String) extends AnyVal
-//class AccountingPeriodStartDate(val value:LocalDate) extends AnyVal
-//class AccountingPeriodEndDate(val value:LocalDate) extends AnyVal
+class AccountingPeriodStartDate(val value:LocalDate) extends AnyVal
+class AccountingPeriodEndDate(val value:LocalDate) extends AnyVal
 class TaxDueForThisPeriod(val value:String) extends AnyVal
 class UnderDeclarationsFromPreviousPeriod(val value:String) extends AnyVal
 class OverDeclarationsForThisPeriod(val value:String) extends AnyVal
@@ -65,10 +73,27 @@ class OtherCredits(val value:String) extends AnyVal
 class StandardRateWaste(val value:String) extends AnyVal
 class LowerRateWaste(val value:String) extends AnyVal
 class ExemptWaste(val value:String) extends AnyVal
-class EnvironmentalBody1(val value:BigDecimal) extends AnyVal
-class EnvironmentalBody2(val value:Option[BigDecimal]) extends AnyVal
 class EmailAddress(val value:Option[String]) extends AnyVal
 class ConfirmEmailAddress(val value:Option[String]) extends AnyVal
+class BodyName(val value:String) extends AnyVal
+class Amount(val value:BigDecimal) extends AnyVal
+
+object BodyName {
+  def apply(value:String) = new BodyName(value)
+
+  implicit val format: Format[BodyName] = ValueClassFormat.format(BodyName.apply)(_.value)
+}
+
+object Amount {
+  def apply(value:BigDecimal) = new Amount(value)
+
+  implicit val format : Format[Amount] = ValueClassFormatBigDecimal.format(Amount.apply)(_.value)
+}
+
+object EnvironmentalBodyPersistence{
+  implicit val formats : Format[EnvironmentalBodyPersistence] = Json.format[EnvironmentalBodyPersistence]
+}
+
 
 case class EitherLandfillTaxDetailsPersistenceMapStringString(value : Either[LandFillTaxDetailsPersistence, Map[String, String]])
 
@@ -267,17 +292,6 @@ object ExemptWaste {
   implicit val format : Format[ExemptWaste] = ValueClassFormat.format(ExemptWaste.apply)(_.value)
 }
 
-object EnvironmentalBody1 {
-  def apply(value: BigDecimal) = new EnvironmentalBody1(value)
-
-  implicit val format : Format[EnvironmentalBody1] = ValueClassFormatBigDecimal.format(EnvironmentalBody1.apply)(_.value)
-}
-
-object EnvironmentalBody2 {
-  def apply(value: BigDecimal) = new EnvironmentalBody2(Some(value))
-
-    implicit val format: Format[EnvironmentalBody2] = ValueClassFormatBigDecimal.format(EnvironmentalBody2.apply)(_.value.getOrElse(0))
-}
 
 object EmailAddress {
   def apply(value: String) = new EmailAddress(Some(value))
@@ -308,7 +322,7 @@ object ValueClassFormat {
 object ValueClassFormatLocalDate {
   def format[A: Format](fromDateToA: LocalDate => A)(fromAToDate: A => LocalDate) = {
     new Format[LocalDate] {
-      override def reads(json: JsValue) : JsResult[LocalDate]= json.validate[String].map(LocalDate.parse)
+      override def reads(json: JsValue): JsResult[LocalDate] = json.validate[String].map(LocalDate.parse)
 
       override def writes(a: LocalDate): JsValue = Json.toJson(a.toString)
     }
@@ -328,6 +342,4 @@ object ValueClassFormatBigDecimal {
     }
   }
 }
-
-
 
