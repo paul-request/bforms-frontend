@@ -16,11 +16,6 @@
 
 package uk.gov.hmrc.bforms.models
 
-<<<<<<< HEAD
-import play.api.libs.json.{Format, JsError, JsResult, JsString, JsSuccess, JsValue, Json, _}
-import org.apache.commons.lang3.RandomStringUtils
-=======
->>>>>>> a80ec9d30197b03c2f626baa557ddb04f9fff76f
 import java.time.LocalDate
 
 import org.apache.commons.lang3.RandomStringUtils
@@ -116,8 +111,7 @@ object LandFillTaxDetailsPersistence {
             standardRateWaste: StandardRateWaste,
             lowerRateWaste: LowerRateWaste,
             exemptWaste: ExemptWaste,
-            environmentalBody1: EnvironmentalBody1,
-            environmentalBody2: EnvironmentalBody2,
+            environmentalBody: Seq[EnvironmentalBody],
             emailAddress: EmailAddress,
             confirmEmailAddress: ConfirmEmailAddress) = {
 
@@ -138,8 +132,7 @@ object LandFillTaxDetailsPersistence {
       standardRateWaste,
       lowerRateWaste,
       exemptWaste,
-      environmentalBody1,
-      environmentalBody2,
+      environmentalBody,
       emailAddress,
       confirmEmailAddress)
   }
