@@ -24,7 +24,7 @@ import play.api.libs.json.{Format, JsError, JsResult, JsString, JsSuccess, JsVal
 /**
   * Created by daniel-connelly on 05/01/17.
   */
-case class LandFillTaxDetailsPersistence(ID : GovernmentGatewayId = GovernmentGatewayId(RandomStringUtils.random(4)),
+case class LandFillTaxDetailsPersistence(registrationNumber : GovernmentGatewayId = GovernmentGatewayId(RandomStringUtils.random(4)),
                                          firstName : FirstName = new FirstName(""),
                                          lastName : LastName = new LastName(""),
                                          telephoneNumber: TelephoneNumber = new TelephoneNumber(""),

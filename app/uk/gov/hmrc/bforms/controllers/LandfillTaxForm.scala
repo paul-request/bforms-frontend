@@ -21,7 +21,7 @@ import java.time.format.DateTimeFormatter
 import java.util.Locale
 import javax.inject.{Inject, Singleton}
 
-import uk.gov.hmrc.bforms.models.{Error, LandFillTaxDetailsPersistence, LandfillTaxDetails}
+import uk.gov.hmrc.bforms.models.{EnvironmentalBody, Error, LandFillTaxDetailsPersistence, LandfillTaxDetails}
 import uk.gov.hmrc.bforms.service._
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 
@@ -97,8 +97,7 @@ class LandfillTaxForm @Inject()(val messagesApi: MessagesApi, repository: LandFi
               formData("standardRateWaste"),
               formData("lowerRateWaste"),
               formData("exemptWaste"),
-              BigDecimal(formData("environmentalBody1")),
-
+              Seq(EnvironmentalBody(formData("environmentalBody1[1].bodyName"),BigDecimal(formData("environmentalBody1[1].amount")))),
               Some(formData("emailAddress")),
               Some(formData("confirmEmailAddress")))
             val formFilled = form.fill(filledForm)
@@ -120,6 +119,7 @@ class LandfillTaxForm @Inject()(val messagesApi: MessagesApi, repository: LandFi
 
       LandfillTaxDetails.form.bindFromRequest.fold(
         error => {
+          println(error.data)
           repository.store(Right(error.data))
           Future.successful(BadRequest(uk.gov.hmrc.bforms.views.html.landfill_tax_form(error, registrationNumber)))
         },

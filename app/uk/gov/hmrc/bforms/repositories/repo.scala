@@ -20,7 +20,7 @@ import java.time.LocalDate
 import javax.inject.Inject
 
 import com.google.inject.Singleton
-import play.api.libs.json.{JsValue, _}
+import play.api.libs.json._
 import reactivemongo.api.DB
 import uk.gov.hmrc.bforms.models._
 import uk.gov.hmrc.mongo.ReactiveRepository
@@ -82,7 +82,7 @@ class LandFillTaxRepositoryImpl @Inject()(implicit db:DB) extends ReactiveReposi
 
   private def findById(id : GovernmentGatewayId): Future[List[Either[LandFillTaxDetailsPersistence, Map[String, String]]]] = {
     find(
-      "ID" -> id
+      "registrationNumber" -> id
     )
   }
 
