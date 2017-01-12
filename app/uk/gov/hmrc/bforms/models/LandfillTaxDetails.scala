@@ -19,7 +19,6 @@ package uk.gov.hmrc.bforms.models
 import java.time.LocalDate
 
 import play.api.data.{Form, Mapping}
-import play.api.data.validation._
 import play.api.data.Forms._
 import play.api.libs.json.Json
 

@@ -16,9 +16,12 @@
 
 package uk.gov.hmrc.bforms.controllers
 
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 import javax.inject.{Inject, Singleton}
 
-import uk.gov.hmrc.bforms.models.{LandFillTaxDetailsPersistence, LandfillTaxDetails}
+import uk.gov.hmrc.bforms.models.{Error, LandFillTaxDetailsPersistence, LandfillTaxDetails}
 import uk.gov.hmrc.bforms.service._
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 
@@ -36,22 +39,17 @@ class LandfillTaxForm @Inject()(val messagesApi: MessagesApi, repository: LandFi
 
 //  implicit val repo : LandFillTaxRepository = LandFillTaxRepository.apply(db
 
-  implicit val y : TaxFormRetrieve[String, LandFillTaxDetailsPersistence] = TaxFormRetrieve.somethingElse(repository)
-  implicit val x : TaxFormSaveExit[LandfillTaxDetails] = TaxFormSaveExit.nameLater(repository)
+  implicit val y : TaxFormRetrieve[String, LandFillTaxDetailsPersistence, Map[String, String]] = TaxFormRetrieve.somethingElse(repository)
+  implicit val x : TaxFormSaveExit[Either[LandfillTaxDetails, Map[String, String]]] = TaxFormSaveExit.nameLater(repository)
 
   def landfillTaxFormDisplay(registrationNumber : String) = Action.async { implicit request =>
     val form = LandfillTaxDetails.form
-
     RetrieveService.retrieve(registrationNumber).flatMap {
-      case x : Either[Unit, List[LandFillTaxDetailsPersistence]] => {
+      case x : Either[Unit, Either[LandFillTaxDetailsPersistence, Map[String, String]]] => {
         x match {
-          case Right(Nil) => {
-            println("Right(Nil)")
-            Future.successful(Ok(uk.gov.hmrc.bforms.views.html.landfill_tax_form(form, registrationNumber.filter(Character.isLetterOrDigit))))
-          }
-          case Right(list) => {
+          case Right(Left(obj)) => {
             println("Right(list)")
-            val formData : LandFillTaxDetailsPersistence = list(0)
+            val formData : LandFillTaxDetailsPersistence = obj
             println(formData.firstName.value)
             val filledForm = new LandfillTaxDetails("",
               formData.firstName.value,
@@ -76,10 +74,42 @@ class LandfillTaxForm @Inject()(val messagesApi: MessagesApi, repository: LandFi
             val formFilled = form.fill(filledForm)
             Future.successful(Ok(uk.gov.hmrc.bforms.views.html.landfill_tax_form(formFilled, registrationNumber.filter(Character.isLetterOrDigit))))
           }
+          case Right(Right(obj)) => {
+            val localDateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy").withLocale(Locale.UK)
+            println("Right(obj)")
+            val formData : Map[String, String] = obj
+            val accountPeriodStartDate = LocalDate.parse(formData("accountingPeriodStartDate"),localDateFormatter)
+            val accountPeriodEndDate = LocalDate.parse(formData("accountingPeriodEndDate"), localDateFormatter)
+            println(formData.apply("firstName"))
+            val filledForm = new LandfillTaxDetails("",
+              formData("firstName"),
+              formData("lastName"),
+              formData("telephoneNumber"),
+              formData("status"),
+              formData("nameOfBuissness"),
+              accountPeriodStartDate,
+              accountPeriodEndDate,
+              formData("taxDueForThisPeriod"),
+              formData("underDeclarationsFromPreviousPeriod"),
+              formData("overDeclarationsForThisPeriod"),
+              BigDecimal(formData("taxCreditClaimedForEnvironment")),
+              formData("badDebtReliefClaimed"),
+              formData("otherCredits"),
+              formData("standardRateWaste"),
+              formData("lowerRateWaste"),
+              formData("exemptWaste"),
+              BigDecimal(formData("environmentalBody1")),
+              Some(BigDecimal(formData("environmentalBody2"))),
+              Some(formData("emailAddress")),
+              Some(formData("confirmEmailAddress")))
+            val formFilled = form.fill(filledForm)
+            Future.successful(Ok(uk.gov.hmrc.bforms.views.html.landfill_tax_form(formFilled, registrationNumber.filter(Character.isLetterOrDigit))))
+          }
           case Left(_) => {
-            println("left(_)")
+            println("blank")
             Future.successful(Ok(uk.gov.hmrc.bforms.views.html.landfill_tax_form(form, registrationNumber.filter(Character.isLetterOrDigit))))
           }
+          case _ => Future.successful(Ok(uk.gov.hmrc.bforms.views.html.landfill_tax_form(form, registrationNumber.filter(Character.isLetterOrDigit))))
         }
       }
     }
@@ -91,11 +121,12 @@ class LandfillTaxForm @Inject()(val messagesApi: MessagesApi, repository: LandFi
 
       LandfillTaxDetails.form.bindFromRequest.fold(
         error => {
+          repository.store(Right(error.data))
           Future.successful(BadRequest(uk.gov.hmrc.bforms.views.html.landfill_tax_form(error, registrationNumber)))
         },
         content => {
           if (content.save.equals("Exit")) {
-            SaveExit.SaveForm(content)(x) map {
+            SaveExit.SaveForm(Left(content))(x) map {
               case false => Ok("Failed")
               case true => Ok("Worked")
             }
