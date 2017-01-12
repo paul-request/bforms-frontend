@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 HM Revenue & Customs
+ * Copyright 2017 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,7 +31,7 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 
 @Singleton
 class LandfillTaxForm @Inject()(val messagesApi: MessagesApi)(implicit ec: ExecutionContext)
-  extends FrontendController with I18nSupport with Actions {
+  extends FrontendController with I18nSupport with BFormsAuth with Actions {
   self: BFormsAuth =>
 
   override lazy val authConnector: AuthConnector = FrontendAuthConnector
