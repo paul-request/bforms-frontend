@@ -54,7 +54,7 @@ class LandFillTaxRepositoryImpl @Inject()(implicit db:DB) extends ReactiveReposi
           StandardRateWaste(landfilltaxdetails.standardRateWaste),
           LowerRateWaste(landfilltaxdetails.lowerRateWaste),
           ExemptWaste(landfilltaxdetails.exemptWaste),
-          form.environmentalBodies,
+          landfilltaxdetails.environmentalBodies,
           EmailAddress(landfilltaxdetails.emailAddress.getOrElse("None")),
           ConfirmEmailAddress(landfilltaxdetails.confirmEmailAddress.getOrElse("None"))
         )
