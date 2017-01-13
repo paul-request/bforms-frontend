@@ -75,54 +75,6 @@ class LandFillTaxRepositoryImpl @Inject()(implicit db:DB) extends ReactiveReposi
   }
 }
 
-object LandFillTaxDetailsPersistence {
-
-  def apply(governmentGateway : GovernmentGatewayId,
-            firstName:FirstName,
-            lastName:LastName,
-            telephoneNumber:TelephoneNumber,
-            status: Status,
-            nameOfBusiness: NameOfBusiness,
-            accountingPeriodStartDate: LocalDate,
-            accountingPeriodEndDate: LocalDate,
-            taxDueForThisPeriod: TaxDueForThisPeriod,
-            underDeclarationsFromPreviousPeriod: UnderDeclarationsFromPreviousPeriod,
-            overDeclarationsForThisPeriod: OverDeclarationsForThisPeriod,
-            taxCreditClaimedForEnvironment: TaxCreditClaimedForEnvironment,
-            badDebtReliefClaimed: BadDebtReliefClaimed,
-            otherCredits: OtherCredits,
-            standardRateWaste: StandardRateWaste,
-            lowerRateWaste: LowerRateWaste,
-            exemptWaste: ExemptWaste,
-            environmentalBodies: Seq[EnvironmentalBody],
-            emailAddress: EmailAddress,
-            confirmEmailAddress: ConfirmEmailAddress) = {
-
-    new LandFillTaxDetailsPersistence(governmentGateway,
-      firstName,
-      lastName,
-      telephoneNumber,
-      status,
-      nameOfBusiness,
-      accountingPeriodStartDate,
-      accountingPeriodEndDate,
-      taxDueForThisPeriod,
-      underDeclarationsFromPreviousPeriod,
-      overDeclarationsForThisPeriod,
-      taxCreditClaimedForEnvironment,
-      badDebtReliefClaimed,
-      otherCredits,
-      standardRateWaste,
-      lowerRateWaste,
-      exemptWaste,
-      environmentalBodies,
-      emailAddress,
-      confirmEmailAddress)
-  }
-
-  val mongoFormat = Json.format[LandFillTaxDetailsPersistence]
-}
-
 trait LandFillTaxRepository {
 
   def store(form : LandfillTaxDetails) : Future[Either[String, Unit]]

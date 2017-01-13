@@ -19,6 +19,7 @@ package uk.gov.hmrc.bforms.models.persistence
 import java.time.LocalDate
 
 import org.apache.commons.lang3.RandomStringUtils
+import play.api.libs.json.Json
 import uk.gov.hmrc.bforms.models._
 
 case class LandFillTaxDetailsPersistence(ID : GovernmentGatewayId = GovernmentGatewayId(RandomStringUtils.random(4)),
@@ -45,7 +46,50 @@ case class LandFillTaxDetailsPersistence(ID : GovernmentGatewayId = GovernmentGa
                                         ){
 }
 
+object LandFillTaxDetailsPersistence {
 
+  def apply(governmentGateway : GovernmentGatewayId,
+            firstName:FirstName,
+            lastName:LastName,
+            telephoneNumber:TelephoneNumber,
+            status: Status,
+            nameOfBusiness: NameOfBusiness,
+            accountingPeriodStartDate: LocalDate,
+            accountingPeriodEndDate: LocalDate,
+            taxDueForThisPeriod: TaxDueForThisPeriod,
+            underDeclarationsFromPreviousPeriod: UnderDeclarationsFromPreviousPeriod,
+            overDeclarationsForThisPeriod: OverDeclarationsForThisPeriod,
+            taxCreditClaimedForEnvironment: TaxCreditClaimedForEnvironment,
+            badDebtReliefClaimed: BadDebtReliefClaimed,
+            otherCredits: OtherCredits,
+            standardRateWaste: StandardRateWaste,
+            lowerRateWaste: LowerRateWaste,
+            exemptWaste: ExemptWaste,
+            environmentalBodies: Seq[EnvironmentalBody],
+            emailAddress: EmailAddress,
+            confirmEmailAddress: ConfirmEmailAddress) = {
 
+    new LandFillTaxDetailsPersistence(governmentGateway,
+      firstName,
+      lastName,
+      telephoneNumber,
+      status,
+      nameOfBusiness,
+      accountingPeriodStartDate,
+      accountingPeriodEndDate,
+      taxDueForThisPeriod,
+      underDeclarationsFromPreviousPeriod,
+      overDeclarationsForThisPeriod,
+      taxCreditClaimedForEnvironment,
+      badDebtReliefClaimed,
+      otherCredits,
+      standardRateWaste,
+      lowerRateWaste,
+      exemptWaste,
+      environmentalBodies,
+      emailAddress,
+      confirmEmailAddress)
+  }
 
-
+  val mongoFormat = Json.format[LandFillTaxDetailsPersistence]
+}
