@@ -28,6 +28,8 @@ import play.api.mvc.Action
 import uk.gov.hmrc.bforms.models.persistence.LandFillTaxDetailsPersistence
 import uk.gov.hmrc.bforms.repositories.LandFillTaxRepository
 
+import reactivemongo.api.DB
+
 
 
 @Singleton

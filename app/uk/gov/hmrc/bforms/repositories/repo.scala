@@ -23,6 +23,7 @@ import com.google.inject.Singleton
 import play.api.libs.json.{Format, Json}
 import uk.gov.hmrc.bforms.models.persistence.{BadDebtReliefClaimed, ConfirmEmailAddress, EmailAddress, ExemptWaste, FirstName, GovernmentGatewayId, LandFillTaxDetailsPersistence, LastName, LowerRateWaste, NameOfBusiness, OtherCredits, OverDeclarationsForThisPeriod, StandardRateWaste, Status, TaxCreditClaimedForEnvironment, TaxDueForThisPeriod, TelephoneNumber, UnderDeclarationsFromPreviousPeriod}
 import uk.gov.hmrc.bforms.models._
+import reactivemongo.api.DB
 import uk.gov.hmrc.mongo.ReactiveRepository
 
 import scala.concurrent.ExecutionContext.Implicits.global
