@@ -324,16 +324,22 @@
             }
 
         <div style="float: left;">
+
+
+
+
         @helper.inputText(dataField("bodyName"), '_label -> "Name", 'inputDivClass -> "col-sm-8", 'placeholder -> "", 'class -> "form-field-group")
         </div>
 
         <div style="float: right;">
-            <dt>
-                <label for='@dataField("amount").id'>Amount</label>
-            </dt>
-            <dd>
-                <input type="text" id='@dataField("amount").id' name='@dataField("amount").name' value='@{if(dataField("amount").value.toString.equals("Some(-1)")){""}else{dataField("amount").value}}' inputdivclass="col-sm-8" class="form-field-group"/>
-            </dd>
+            <dl class="" id='@dataField("amount").id'>
+                <dt>
+                    <label for='@dataField("amount").id'>Amount</label>
+                </dt>
+                <dd>
+                    <input type="text" id='@dataField("amount").id' name='@dataField("amount").name' value='@{if(dataField("amount").value.toString.equals("Some(-1)")){""}else{dataField("amount").value}}' inputdivclass="col-sm-8" class="form-field-group"/>
+                </dd>
+            </dl>
         <!--@helper.inputText(dataField("amount"), '_label -> "Amount", 'inputDivClass -> "col-sm-8", 'placeholder -> "", 'class -> "form-field-group")-->
         </div>
         }
