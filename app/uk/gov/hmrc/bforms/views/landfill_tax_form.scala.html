@@ -327,10 +327,14 @@
         @helper.inputText(dataField("bodyName"), '_label -> "Name", 'inputDivClass -> "col-sm-8", 'placeholder -> "", 'class -> "form-field-group")
         </div>
 
-            @{dataField("amount").value = if(dataField("amount").value < 0){""} else {dataField("amount")}}
-
         <div style="float: right;">
-        @helper.inputText(dataField("amount"), '_label -> "Amount", 'inputDivClass -> "col-sm-8", 'placeholder -> "", 'class -> "form-field-group", 'value -> "")
+            <dt>
+                <label for='@dataField("amount").id'>Amount</label>
+            </dt>
+            <dd>
+                <input type="text" id='@dataField("amount").id' name='@dataField("amount").name' value='@{if(dataField("amount").value.toString.equals("Some(-1)")){""}else{dataField("amount").value}}' inputdivclass="col-sm-8" class="form-field-group"/>
+            </dd>
+        <!--@helper.inputText(dataField("amount"), '_label -> "Amount", 'inputDivClass -> "col-sm-8", 'placeholder -> "", 'class -> "form-field-group")-->
         </div>
         }
         <h1>Declaration</h1>

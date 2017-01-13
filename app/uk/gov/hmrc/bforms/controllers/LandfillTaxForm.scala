@@ -99,7 +99,7 @@ class LandfillTaxForm @Inject()(val messagesApi: MessagesApi, repository: LandFi
 
             val environmentalBodyAmount: BigDecimal = {
               formData("environmentalBody1[1].amount") match {
-                case "" => -1
+                case "" => BigDecimal(-1)
                 case s => BigDecimal(s)
               }
             }
