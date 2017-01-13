@@ -5,7 +5,6 @@
     @import uk.gov.hmrc.bforms.views.html.helpers.forms.{form, submit}
     @import uk.gov.hmrc.play.views.html.helpers._
     @import views.html.helper.CSRF
-    @import java.time.LocalDate
     landfillTaxFormSubmitContinue
     @uk.gov.hmrc.bforms.views.html.main_template(title = "bforms-frontend landfill tax form", bodyClasses = None) {
         <header class="page-header text">
@@ -114,13 +113,13 @@
                 <p>For example 20/03/2010</p>
                 @errorInline("accountingPeriodStartDate", "Please enter the start date of the accounting period", Seq("optional-extra-css-classes"))
                 <input
-                        type="text"
-                        name="accountingPeriodStartDate1"
-                        id="accountingPeriodStartDate"
-                        value="@{if(landfillTaxForm("accountingPeriodStartDate").value.get.toString.equals("01/01/+1000000000")){""} else {landfillTaxForm("accountingPeriodStartDate").value}}"
+                type="text"
+                name="accountingPeriodStartDate"
+                id="accountingPeriodStartDate"
+                value="@{if(landfillTaxForm("accountingPeriodStartDate").value.toString.equals("Some(01/01/+1000000000)")){""}else{landfillTaxForm("accountingPeriodStartDate")}}"
                 class="form-control form-control--block"
-                <!--required-->
-                pattern="^(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\d\d$"
+                required
+                    pattern="^(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\d\d$"
                 >
             </label>
         </fieldset>
@@ -134,9 +133,9 @@
                 type="text"
                 name="accountingPeriodEndDate"
                 id="accountingPeriodEndDate"
-                value="@{if(landfillTaxForm("accountingPeriodEndDate").value.get.toString.equals("01/01/+1000000000")){""} else {landfillTaxForm("accountingPeriodEndDate").value}}"
+                value=""@{if(landfillTaxForm("accountingPeriodEndDate").value.toString.equals("Some(01/01/+1000000000)")){""}else{landfillTaxForm("accountingPeriodEndDate")}}""
                 class="form-control form-control--block"
-                <!--required-->
+                required
                 pattern="^(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\d\d$"
                 >
             </label>
@@ -153,7 +152,7 @@
                 id="taxDueForThisPeriod"
                 value="@landfillTaxForm("taxDueForThisPeriod").value"
                 class="form-control form-control--block"
-                <!--required-->
+                required
                     pattern="[\d.]+"
                 >
             </label>
@@ -222,7 +221,7 @@
                 type="text"
                 name="taxCreditClaimedForEnvironment"
                 id="taxCreditClaimedForEnvironment"
-                value="@{if(landfillTaxForm("taxCreditClaimedForEnvironment").value.get.toString.equals("0")){""} else {landfillTaxForm("taxCreditClaimedForEnvironment").value}}"
+                value="@{if(landfillTaxForm("taxCreditClaimedForEnvironment").value.get.toString.equals("-1")){""} else {landfillTaxForm("taxCreditClaimedForEnvironment").value}}"
                 class="form-control form-control--block"
                 <!--required-->
                     pattern="[\d.]+"
@@ -317,21 +316,20 @@
                 @errorInline("environmentalBody1", "Please Enter Environmental Body1", Seq("optional-extra-css-classes"))
 
         </fieldset>
-        @helper.repeat(landfillTaxForm("environmentalBody1"), min = landfillTaxForm("environmentalBody1").indexes.length + 1) { dataField =>
+        @helper.repeat(landfillTaxForm("environmentalBody1"), min =  1) { dataField =>
             @dataField("bodyName").value.map { _ =>
                 @dataField("amount").value.map { _ =>
             }
             }
 
-        <div style="float: left;">
 
-
-
-
+        <script src='@routes.Assets.versioned("javascripts/addInput.js")' language="Javascript" type="text/javascript"></script>
+        <div id="dynamicInput">
+        <div style="float: left;" id="name_0">
         @helper.inputText(dataField("bodyName"), '_label -> "Name", 'inputDivClass -> "col-sm-8", 'placeholder -> "", 'class -> "form-field-group")
         </div>
 
-        <div style="float: right;">
+        <div style="float: right;" id="amount_0">
             <dl class="" id='@dataField("amount").id'>
                 <dt>
                     <label for='@dataField("amount").id'>Amount</label>
@@ -341,7 +339,22 @@
                 </dd>
             </dl>
         <!--@helper.inputText(dataField("amount"), '_label -> "Amount", 'inputDivClass -> "col-sm-8", 'placeholder -> "", 'class -> "form-field-group")-->
+
+
         </div>
+        </div>
+                <div id="newField">
+                </div>
+                <br>
+            <br>
+            <br>
+            <br>
+            <br>
+          <div style="float:right">
+              <button type="button" value="Add" onClick="addInput('dynamicInput');">Add</button>
+              <button type="button" value="remove" onClick="removeField('newField');">Delete</button>
+          </div>
+
         }
         <h1>Declaration</h1>
         <h4>You can avoid financial penalty, or even prosecution, by making sure that you have given complete and accurate information on this form.
@@ -362,7 +375,7 @@
                 id="emailAddress"
                 value="@landfillTaxForm("emailAddress").value"
                 class="form-control form-control--block"
-                pattern="[^ @@]+@@[^ @@]+"
+                pattern="([^ @@]+@@[^ @@]+)?"
                 >
             </label>
         </fieldset>
@@ -377,7 +390,7 @@
                 id="confirmEmailAddress"
                 value="@landfillTaxForm("confirmEmailAddress").value"
                 class="form-control form-control--block"
-                pattern="[^ @@]+@@[^ @@]+"
+                pattern="([^ @@]+@@[^ @@]+)?"
                 >
             </label>
         </fieldset>
