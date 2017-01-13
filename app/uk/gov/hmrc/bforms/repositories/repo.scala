@@ -22,6 +22,7 @@ import javax.inject.Inject
 import com.google.inject.Singleton
 import play.api.libs.json._
 import reactivemongo.api.DB
+import reactivemongo.bson.{BSONDocument, BSONObjectID}
 import uk.gov.hmrc.bforms.models._
 import uk.gov.hmrc.mongo.ReactiveRepository
 
@@ -80,14 +81,38 @@ class LandFillTaxRepositoryImpl @Inject()(implicit db:DB) extends ReactiveReposi
     )
   }
 
-  private def findById(id : GovernmentGatewayId): Future[List[Either[LandFillTaxDetailsPersistence, Map[String, String]]]] = {
-    find(
-      "registrationNumber" -> id
-    )
+  private def findByIdObject(id : GovernmentGatewayId): Future[List[Either[LandFillTaxDetailsPersistence, Map[String, String]]]] = {
+    find("object.registrationNumber" -> id)
+  }
+
+  private def findByIdMap(id : GovernmentGatewayId): Future[List[Either[LandFillTaxDetailsPersistence, Map[String, String]]]] = {
+    find("map.registrationNumber" -> id)
   }
 
   def get(id : String) :Future[List[Either[LandFillTaxDetailsPersistence, Map[String, String]]]] = {
-    findById(GovernmentGatewayId(id))
+    findByIdMap(GovernmentGatewayId(id)).flatMap {
+      case empty if(empty.isEmpty) => {
+        println("empty")
+        findByIdObject(GovernmentGatewayId(id)).flatMap{
+          case emptyList if(emptyList.isEmpty) => {
+            println("emptyList")
+            Future.successful(emptyList)
+          }
+          case fullList => {
+            println("fullList")
+            Future.successful(fullList)
+          }
+          case _ =>{
+            println("someResponse")
+            Future.successful(empty)
+          }
+        }
+      }
+      case list : List[Either[LandFillTaxDetailsPersistence, Map[String, String]]] => {
+        println("list")
+        Future.successful(list)
+      }
+    }
   }
 }
 

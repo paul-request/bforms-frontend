@@ -47,12 +47,17 @@ object RetrieveService {
 
   def retrieve[A, B, C](registrationNumber:A)(implicit taxFormRetrieve:TaxFormRetrieve[A, LandFillTaxDetailsPersistence, Map[String, String]]) : Future[Either[Unit, Either[LandFillTaxDetailsPersistence, Map[String, String]]]] = {
     taxFormRetrieve(registrationNumber).flatMap {
-      case obj if(obj.isEmpty) => Future.successful(Left(()))
+      case obj: List[Either[LandFillTaxDetailsPersistence, Map[String, String]]] if(obj.isEmpty) => {
+        println("emptyList")
+        Future.successful(Left(()))
+      }
       case obj: List[Either[LandFillTaxDetailsPersistence, Map[String, String]]] => obj(0).fold(
         left => {
+          println("left")
           Future.successful(Right(Left(left)))
         },
         right => {
+          println("right")
           Future.successful(Right(Right(right)))
         }
       )

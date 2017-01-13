@@ -153,17 +153,22 @@ object EitherLandfillTaxDetailsPersistenceMapStringString {
 
 object ValueClassFormatEitherLandfillTaxDetailsPersistenceMapStringString {
 
-
-  def format[A, B](implicit readL: Reads[A], readR: Reads[B], writeL: Writes[A], writeR: Writes[B]) : Format[Either[A, B]] = {
+  def format[A <:LandFillTaxDetailsPersistence, B <:Map[String, String]](implicit readL: Reads[A], readR: Reads[B], writeL: Writes[A], writeR: Writes[B]) : Format[Either[A, B]] = {
     new Format[Either[A, B]] {
       def reads(json: JsValue) : JsResult[Either[A, B]] = {
         json match {
           case o @ JsObject(_) =>
-            (o.value.get("l"), o.value.get("r")) match {
-              case (Some(obj), None) => readL.reads(obj).map(Left(_))
-              case (None, Some(obj)) => readR.reads(obj).map(Right(_))
+            (o.value.get("object"), o.value.get("map")) match {
+              case (Some(obj), None) => {
+                println("object")
+                readL.reads(obj).map(Left(_))
+              }
+              case (None, Some(obj)) => {
+                println("map")
+                readR.reads(obj).map(Right(_))
+              }
               case (unknownL, unknownR) => JsError(
-                s"""|Expected 'l' or 'r' for Either[L, R] type.
+                s"""|Expected 'object' or 'map' for Either[L, R] type.
                     |UnknownL: $unknownL
                     |UnkownR : $unknownR
                    """.stripMargin)
@@ -172,10 +177,16 @@ object ValueClassFormatEitherLandfillTaxDetailsPersistenceMapStringString {
         }
       }
 
-      def writes(v: Either[A,B]) : JsValue = {
+      def writes(v: Either[A, B]) : JsValue = {
         v match {
-          case Left(left) => Json.obj("l" -> writeL.writes(left))
-          case Right(right) => Json.obj("r" -> writeR.writes(right))
+          case Left(left) => {
+            println("Left(left)")
+            Json.obj("object" -> writeL.writes(left))
+          }
+          case Right(right) => {
+            println("Right(right)")
+            Json.obj("map" -> writeR.writes(right))
+          }
         }
       }
     }
