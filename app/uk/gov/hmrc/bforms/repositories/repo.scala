@@ -21,16 +21,13 @@ import javax.inject.Inject
 
 import com.google.inject.Singleton
 import play.api.libs.json.{Format, Json}
-import reactivemongo.api.DB
-import uk.gov.hmrc.bforms.models.{Amount, BadDebtReliefClaimed, BodyName, ConfirmEmailAddress, EmailAddress, EnvironmentalBody, EnvironmentalBodyPersistence, ExemptWaste, FirstName, GovernmentGatewayId, LandFillTaxDetailsPersistence, LandfillTaxDetails, LastName, LowerRateWaste, NameOfBusiness, OtherCredits, OverDeclarationsForThisPeriod, StandardRateWaste, Status, TaxCreditClaimedForEnvironment, TaxDueForThisPeriod, TelephoneNumber, UnderDeclarationsFromPreviousPeriod}
+import uk.gov.hmrc.bforms.models.persistence.{BadDebtReliefClaimed, ConfirmEmailAddress, EmailAddress, ExemptWaste, FirstName, GovernmentGatewayId, LandFillTaxDetailsPersistence, LastName, LowerRateWaste, NameOfBusiness, OtherCredits, OverDeclarationsForThisPeriod, StandardRateWaste, Status, TaxCreditClaimedForEnvironment, TaxDueForThisPeriod, TelephoneNumber, UnderDeclarationsFromPreviousPeriod}
+import uk.gov.hmrc.bforms.models._
 import uk.gov.hmrc.mongo.ReactiveRepository
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-/**
-  * Created by daniel-connelly on 22/12/16.
-  */
 @Singleton
 class LandFillTaxRepositoryImpl @Inject()(implicit db:DB) extends ReactiveRepository[LandFillTaxDetailsPersistence, String]("formData", () => db, LandFillTaxDetailsPersistence.mongoFormat, implicitly[Format[String]]) with LandFillTaxRepository {
 

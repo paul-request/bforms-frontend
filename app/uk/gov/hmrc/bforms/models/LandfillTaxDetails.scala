@@ -25,10 +25,11 @@ import play.api.libs.json.{Format, Json}
 case class EnvironmentalBody(bodyName: String, amount: BigDecimal)
 
 object EnvironmentalBody {
-  implicit val formats : Format[EnvironmentalBody] = Json.format[EnvironmentalBody]
+  implicit val formats: Format[EnvironmentalBody] = Json.format[EnvironmentalBody]
 }
+
 case class LandfillTaxDetails(
-                               save:String,
+                               save: String,
                                firstName: String,
                                lastName: String,
                                telephoneNumber: String,
@@ -53,33 +54,34 @@ case class LandfillTaxDetails(
 object LandfillTaxDetails {
   implicit val formats = Json.format[LandfillTaxDetails]
 
-  val landfillTaxDetailsMapping : Mapping[LandfillTaxDetails]
-  = {mapping(
-    "save" -> nonEmptyText,
-    "firstName" -> nonEmptyText,
-    "lastName" -> nonEmptyText,
-    "telephoneNumber" -> nonEmptyText(minLength = 3),
-    "status" -> nonEmptyText,
-    "nameOfBusiness" -> nonEmptyText,
-    "accountingPeriodStartDate" -> localDate("dd/MM/yyyy"),
-    "accountingPeriodEndDate" -> localDate("dd/MM/yyyy"),
-    "taxDueForThisPeriod" -> nonEmptyText,
-    "underDeclarationsFromPreviousPeriod" -> nonEmptyText,
-    "overDeclarationsForThisPeriod" -> nonEmptyText,
-    "taxCreditClaimedForEnvironment" -> bigDecimal,
-    "badDebtReliefClaimed" -> nonEmptyText,
-    "otherCredits" -> nonEmptyText,
-    "standardRateWaste" -> nonEmptyText,
-    "lowerRateWaste" -> nonEmptyText,
-    "exemptWaste" -> nonEmptyText,
-    "environmentalBody1" -> seq(mapping(
-      "bodyName" -> text,
+  val landfillTaxDetailsMapping: Mapping[LandfillTaxDetails]
+  = {
+    mapping(
+      "save" -> nonEmptyText,
+      "firstName" -> nonEmptyText,
+      "lastName" -> nonEmptyText,
+      "telephoneNumber" -> nonEmptyText(minLength = 3),
+      "status" -> nonEmptyText,
+      "nameOfBusiness" -> nonEmptyText,
+      "accountingPeriodStartDate" -> localDate("dd/MM/yyyy"),
+      "accountingPeriodEndDate" -> localDate("dd/MM/yyyy"),
+      "taxDueForThisPeriod" -> nonEmptyText,
+      "underDeclarationsFromPreviousPeriod" -> nonEmptyText,
+      "overDeclarationsForThisPeriod" -> nonEmptyText,
+      "taxCreditClaimedForEnvironment" -> bigDecimal,
+      "badDebtReliefClaimed" -> nonEmptyText,
+      "otherCredits" -> nonEmptyText,
+      "standardRateWaste" -> nonEmptyText,
+      "lowerRateWaste" -> nonEmptyText,
+      "exemptWaste" -> nonEmptyText,
+      "environmentalBody1" -> seq(mapping(
+        "bodyName" -> text,
         "amount" -> bigDecimal
-    )(EnvironmentalBody.apply)(EnvironmentalBody.unapply)),
-    "emailAddress" -> optional(text),
-    "confirmEmailAddress" -> optional(text)
-  )(LandfillTaxDetails.apply)(LandfillTaxDetails.unapply)
-}
+      )(EnvironmentalBody.apply)(EnvironmentalBody.unapply)),
+      "emailAddress" -> optional(text),
+      "confirmEmailAddress" -> optional(text)
+    )(LandfillTaxDetails.apply)(LandfillTaxDetails.unapply)
+  }
 
   def validateEmail(landfillTaxDetails: LandfillTaxDetails): Boolean = {
     landfillTaxDetails.emailAddress match {
@@ -88,9 +90,97 @@ object LandfillTaxDetails {
     }
   }
 
-  def validateEnvironmentalTotal(landfillTaxDetails : LandfillTaxDetails) : Boolean =
+  def validateEnvironmentalTotal(landfillTaxDetails: LandfillTaxDetails): Boolean =
     landfillTaxDetails.taxCreditClaimedForEnvironment == landfillTaxDetails.environmentalBodies.map(_.amount).sum
+
   val form = Form(landfillTaxDetailsMapping
+    .verifying("Environmental credit claimed does not match total for environmental bodies", validateEnvironmentalTotal _)
+    .verifying("Email address does not match", validateEmail _)
+  )
+
+}
+
+case class LandfillTaxDetailsPerson(
+                                     save: String,
+                                     firstName: String,
+                                     lastName: String,
+                                     telephoneNumber: String,
+                                     status: String
+                                   )
+
+object LandfillTaxDetailsPerson {
+  implicit val formats = Json.format[LandfillTaxDetails]
+
+  val personMapping: Mapping[LandfillTaxDetailsPerson] =
+    mapping(
+      "save" -> nonEmptyText,
+      "firstName" -> nonEmptyText,
+      "lastName" -> nonEmptyText,
+      "telephoneNumber" -> nonEmptyText(minLength = 3),
+      "status" -> nonEmptyText
+    )(LandfillTaxDetailsPerson.apply)(LandfillTaxDetailsPerson.unapply)
+
+
+  val form = Form(personMapping)
+
+}
+
+case class LandfillTaxDetailsDeclaration(
+                                          save: String,
+                                          nameOfBusiness: String,
+                                          accountingPeriodStartDate: LocalDate,
+                                          accountingPeriodEndDate: LocalDate,
+                                          taxDueForThisPeriod: String,
+                                          underDeclarationsFromPreviousPeriod: String,
+                                          overDeclarationsForThisPeriod: String,
+                                          taxCreditClaimedForEnvironment: BigDecimal,
+                                          badDebtReliefClaimed: String,
+                                          otherCredits: String,
+                                          standardRateWaste: String,
+                                          lowerRateWaste: String,
+                                          exemptWaste: String,
+                                          environmentalBodies: Seq[EnvironmentalBody],
+                                          emailAddress: Option[String],
+                                          confirmEmailAddress: Option[String]
+                                        )
+
+object LandfillTaxDetailsDeclaration {
+  implicit val formats = Json.format[LandfillTaxDetails]
+
+  val declarationMapping: Mapping[LandfillTaxDetailsDeclaration] =
+    mapping(
+      "save" -> nonEmptyText,
+      "nameOfBusiness" -> nonEmptyText,
+      "accountingPeriodStartDate" -> localDate("dd/MM/yyyy"),
+      "accountingPeriodEndDate" -> localDate("dd/MM/yyyy"),
+      "taxDueForThisPeriod" -> nonEmptyText,
+      "underDeclarationsFromPreviousPeriod" -> nonEmptyText,
+      "overDeclarationsForThisPeriod" -> nonEmptyText,
+      "taxCreditClaimedForEnvironment" -> bigDecimal,
+      "badDebtReliefClaimed" -> nonEmptyText,
+      "otherCredits" -> nonEmptyText,
+      "standardRateWaste" -> nonEmptyText,
+      "lowerRateWaste" -> nonEmptyText,
+      "exemptWaste" -> nonEmptyText,
+      "environmentalBody1" -> seq(mapping(
+        "bodyName" -> text,
+        "amount" -> bigDecimal
+      )(EnvironmentalBody.apply)(EnvironmentalBody.unapply)),
+      "emailAddress" -> optional(text),
+      "confirmEmailAddress" -> optional(text)
+    )(LandfillTaxDetailsDeclaration.apply)(LandfillTaxDetailsDeclaration.unapply)
+
+
+  def validateEmail(l: LandfillTaxDetailsDeclaration): Boolean =
+    l.emailAddress match {
+      case Some(e) if (e != l.confirmEmailAddress.getOrElse("")) => false
+      case _ => true
+    }
+
+  def validateEnvironmentalTotal(l: LandfillTaxDetailsDeclaration): Boolean =
+    l.taxCreditClaimedForEnvironment == l.environmentalBodies.map(_.amount).sum
+
+  val form = Form(declarationMapping
     .verifying("Environmental credit claimed does not match total for environmental bodies", validateEnvironmentalTotal _)
     .verifying("Email address does not match", validateEmail _)
   )

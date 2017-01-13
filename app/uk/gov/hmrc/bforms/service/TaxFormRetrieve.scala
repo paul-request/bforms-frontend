@@ -17,15 +17,12 @@
 package uk.gov.hmrc.bforms.service
 
 import play.api.libs.functional.syntax.toApplicativeOps
-import uk.gov.hmrc.bforms.models.LandFillTaxDetailsPersistence
+import uk.gov.hmrc.bforms.models.persistence.LandFillTaxDetailsPersistence
 import uk.gov.hmrc.bforms.repositories.LandFillTaxRepository
 
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 
-/**
-  * Created by daniel-connelly on 10/01/17.
-  */
 trait TaxFormRetrieve[A, B] {
   def apply(a: A) : Future[List[B]]
 }

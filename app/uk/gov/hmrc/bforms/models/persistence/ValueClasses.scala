@@ -14,43 +14,11 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.bforms.models
+package uk.gov.hmrc.bforms.models.persistence
 
 import java.time.LocalDate
 
-import org.apache.commons.lang3.RandomStringUtils
-import play.api.libs.json.{Format, JsError, JsResult, JsString, JsSuccess, JsValue, Json, _}
-
-/**
-  * Created by daniel-connelly on 05/01/17.
-  */
-case class LandFillTaxDetailsPersistence(ID : GovernmentGatewayId = GovernmentGatewayId(RandomStringUtils.random(4)),
-                                         firstName : FirstName = new FirstName(""),
-                                         lastName : LastName = new LastName(""),
-                                         telephoneNumber: TelephoneNumber = new TelephoneNumber(""),
-                                         status: Status = new Status(""),
-                                         nameOfBusiness: NameOfBusiness = new NameOfBusiness(""),
-                                         accountingPeriodStartDate: LocalDate = LocalDate.now,
-                                         accountingPeriodEndDate: LocalDate = LocalDate.now,
-                                         taxDueForThisPeriod: TaxDueForThisPeriod = new TaxDueForThisPeriod(""),
-                                         underDeclarationsFromPreviousPeriod: UnderDeclarationsFromPreviousPeriod = new UnderDeclarationsFromPreviousPeriod(""),
-                                         overDeclarationsForThisPeriod: OverDeclarationsForThisPeriod = new OverDeclarationsForThisPeriod(""),
-                                         taxCreditClaimedForEnvironment: TaxCreditClaimedForEnvironment = new TaxCreditClaimedForEnvironment(0),
-                                         badDebtReliefClaimed: BadDebtReliefClaimed = new BadDebtReliefClaimed(""),
-                                         otherCredits: OtherCredits = new OtherCredits(""),
-                                         standardRateWaste: StandardRateWaste = new StandardRateWaste(""),
-                                         lowerRateWaste: LowerRateWaste = new LowerRateWaste(""),
-                                         exemptWaste: ExemptWaste = new ExemptWaste(""),
-                                         environmentalBody1: Seq[EnvironmentalBody] =  Seq(EnvironmentalBody("default" , 0)),
-                                         emailAddress: EmailAddress = new EmailAddress(Some("")),
-                                         confirmEmailAddress: ConfirmEmailAddress = new ConfirmEmailAddress(Some("")),
-                                         datePersisted : LocalDate = LocalDate.now
-                                        ){
-}
-
-class GovernmentGatewayId(val value:String) extends AnyVal
-
-case class EnvironmentalBodyPersistence(bodyName:BodyName, amount:Amount)
+import play.api.libs.json.Format
 
 class FirstName(val value:String) extends AnyVal
 class LastName(val value:String) extends AnyVal
@@ -83,17 +51,6 @@ object Amount {
   def apply(value:BigDecimal) = new Amount(value)
 
   implicit val format : Format[Amount] = ValueClassFormatBigDecimal.format(Amount.apply)(_.value)
-}
-
-object EnvironmentalBodyPersistence{
-  implicit val formats : Format[EnvironmentalBodyPersistence] = Json.format[EnvironmentalBodyPersistence]
-}
-
-
-object GovernmentGatewayId {
-  def apply(value: String) = new GovernmentGatewayId(value)
-
-  implicit val format: Format[GovernmentGatewayId] = ValueClassFormat.format(GovernmentGatewayId.apply)(_.value)
 }
 
 object FirstName {
@@ -205,42 +162,3 @@ object ConfirmEmailAddress {
 
   implicit val format : Format[ConfirmEmailAddress] = ValueClassFormat.format(ConfirmEmailAddress.apply)(_.value.getOrElse("None"))
 }
-
-object ValueClassFormat {
-  def format[A: Format](fromStringToA: String => A)(fromAToString: A => String) = {
-    new Format[A] {
-      def reads(json: JsValue): JsResult[A] = {
-        json match {
-          case JsString(str) => JsSuccess(fromStringToA(str))
-          case unknown => JsError(s"JsString value expected, got: $unknown")
-        }
-      }
-      def writes(a: A): JsValue = JsString(fromAToString(a))
-    }
-  }
-}
-
-object ValueClassFormatLocalDate {
-  def format[A: Format](fromDateToA: LocalDate => A)(fromAToDate: A => LocalDate) = {
-    new Format[LocalDate] {
-      override def reads(json: JsValue): JsResult[LocalDate] = json.validate[String].map(LocalDate.parse)
-
-      override def writes(a: LocalDate): JsValue = Json.toJson(a.toString)
-    }
-  }
-}
-
-object ValueClassFormatBigDecimal {
-  def format[A: Format](fromBigDecimalToA: BigDecimal => A)(fromAToBigDecimal: A => BigDecimal) = {
-    new Format[A] {
-      def reads(json: JsValue): JsResult[A] = {
-        json match {
-          case JsNumber(num) => JsSuccess(fromBigDecimalToA(num))
-          case unknown => JsError(s"JsNumber value expected, got: $unknown")
-        }
-      }
-      def writes(a: A): JsValue = JsNumber(fromAToBigDecimal(a))
-    }
-  }
-}
-

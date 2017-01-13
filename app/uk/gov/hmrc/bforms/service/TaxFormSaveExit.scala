@@ -22,9 +22,6 @@ import uk.gov.hmrc.bforms.models.LandfillTaxDetails
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 
-/**
-  * Created by daniel-connelly on 06/01/17.
-  */
 trait TaxFormSaveExit[A] {
   def apply(a: A): Future[Either[String,Unit]]
 }
