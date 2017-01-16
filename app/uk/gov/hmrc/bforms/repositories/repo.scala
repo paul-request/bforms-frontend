@@ -21,10 +21,10 @@ import javax.inject.Inject
 
 import com.google.inject.Singleton
 import play.api.libs.json._
-import reactivemongo.api.DB
-import reactivemongo.bson.{BSONDocument, BSONObjectID}
 import uk.gov.hmrc.bforms.models._
+import uk.gov.hmrc.bforms.models.persistence.{BadDebtReliefClaimed, ConfirmEmailAddress, EitherLandfillTaxDetailsPersistenceMapStringString, EmailAddress, ExemptWaste, FirstName, GovernmentGatewayId, LandFillTaxDetailsPersistence, LastName, LowerRateWaste, NameOfBusiness, OtherCredits, OverDeclarationsForThisPeriod, StandardRateWaste, Status, TaxCreditClaimedForEnvironment, TaxDueForThisPeriod, TelephoneNumber, UnderDeclarationsFromPreviousPeriod}
 import uk.gov.hmrc.mongo.ReactiveRepository
+import reactivemongo.api.DB
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -114,54 +114,6 @@ class LandFillTaxRepositoryImpl @Inject()(implicit db:DB) extends ReactiveReposi
       }
     }
   }
-}
-
-object LandFillTaxDetailsPersistence {
-
-  def apply(governmentGateway : GovernmentGatewayId,
-            firstName:FirstName,
-            lastName:LastName,
-            telephoneNumber:TelephoneNumber,
-            status: Status,
-            nameOfBusiness: NameOfBusiness,
-            accountingPeriodStartDate: LocalDate,
-            accountingPeriodEndDate: LocalDate,
-            taxDueForThisPeriod: TaxDueForThisPeriod,
-            underDeclarationsFromPreviousPeriod: UnderDeclarationsFromPreviousPeriod,
-            overDeclarationsForThisPeriod: OverDeclarationsForThisPeriod,
-            taxCreditClaimedForEnvironment: TaxCreditClaimedForEnvironment,
-            badDebtReliefClaimed: BadDebtReliefClaimed,
-            otherCredits: OtherCredits,
-            standardRateWaste: StandardRateWaste,
-            lowerRateWaste: LowerRateWaste,
-            exemptWaste: ExemptWaste,
-            environmentalBodies: Seq[EnvironmentalBody],
-            emailAddress: EmailAddress,
-            confirmEmailAddress: ConfirmEmailAddress) = {
-
-    new LandFillTaxDetailsPersistence(governmentGateway,
-      firstName,
-      lastName,
-      telephoneNumber,
-      status,
-      nameOfBusiness,
-      accountingPeriodStartDate,
-      accountingPeriodEndDate,
-      taxDueForThisPeriod,
-      underDeclarationsFromPreviousPeriod,
-      overDeclarationsForThisPeriod,
-      taxCreditClaimedForEnvironment,
-      badDebtReliefClaimed,
-      otherCredits,
-      standardRateWaste,
-      lowerRateWaste,
-      exemptWaste,
-      environmentalBodies,
-      emailAddress,
-      confirmEmailAddress)
-  }
-
-  val mongoFormat = Json.format[LandFillTaxDetailsPersistence]
 }
 
 trait LandFillTaxRepository {

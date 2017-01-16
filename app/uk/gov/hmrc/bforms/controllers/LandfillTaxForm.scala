@@ -21,15 +21,16 @@ import java.time.format.DateTimeFormatter
 import java.util.Locale
 import javax.inject.{Inject, Singleton}
 
-import uk.gov.hmrc.bforms.models.{EnvironmentalBody, Error, LandFillTaxDetailsPersistence, LandfillTaxDetails}
+import uk.gov.hmrc.bforms.models.{EnvironmentalBody, Error, LandfillTaxDetails}
 import uk.gov.hmrc.bforms.service._
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 
 import scala.concurrent.{ExecutionContext, Future}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.Action
-import reactivemongo.api.DB
+import uk.gov.hmrc.bforms.models.persistence.LandFillTaxDetailsPersistence
 import uk.gov.hmrc.bforms.repositories.LandFillTaxRepository
+import reactivemongo.api.DB
 
 
 

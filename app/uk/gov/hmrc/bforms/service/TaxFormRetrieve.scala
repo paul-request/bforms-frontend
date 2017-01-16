@@ -17,7 +17,7 @@
 package uk.gov.hmrc.bforms.service
 
 import play.api.Logger
-import uk.gov.hmrc.bforms.models.LandFillTaxDetailsPersistence
+import uk.gov.hmrc.bforms.models.persistence.LandFillTaxDetailsPersistence
 import uk.gov.hmrc.bforms.repositories.LandFillTaxRepository
 
 import scala.concurrent.Future
