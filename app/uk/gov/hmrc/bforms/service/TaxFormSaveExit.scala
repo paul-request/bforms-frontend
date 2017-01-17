@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.bforms.service
 
-import uk.gov.hmrc.bforms.repositories.LandFillTaxRepository
+import uk.gov.hmrc.bforms.repositories.LandfillTaxRepository
 import uk.gov.hmrc.bforms.models.LandfillTaxDetails
 
 import scala.concurrent.Future
@@ -37,7 +37,7 @@ object TaxFormSaveExit {
     }
   }
 
-  implicit def nameLater(implicit repository: LandFillTaxRepository): TaxFormSaveExit[Either[LandfillTaxDetails, Map[String, String]]] = {
+  implicit def nameLater(implicit repository: LandfillTaxRepository): TaxFormSaveExit[Either[LandfillTaxDetails, Map[String, String]]] = {
     getTaxFormSaveExit((r : Either[LandfillTaxDetails, Map[String, String]]) =>  repository.store(r))
   }
 }
