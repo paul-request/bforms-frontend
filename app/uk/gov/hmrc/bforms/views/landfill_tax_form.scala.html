@@ -14,7 +14,7 @@
     <h2>About you</h2>
         </p>
 
-        <div action=@uk.gov.hmrc.bforms.controllers.routes.LandfillTaxForm.landfillTaxForms(registrationNumber:String).url method="POST" class="js-form" autocomplete="off" novalidate="novalidate">
+        <form action=@uk.gov.hmrc.bforms.controllers.routes.LandfillTaxForm.landfillTaxForms(registrationNumber:String).url method="POST" class="js-form" autocomplete="off" novalidate="novalidate">
 
             @{
                 CSRF.formField
