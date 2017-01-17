@@ -29,9 +29,6 @@ import reactivemongo.api.DB
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-/**
-  * Created by daniel-connelly on 22/12/16.
-  */
 @Singleton
 class LandfillTaxRepositoryImpl @Inject()(implicit db:DB) extends ReactiveRepository[Either[LandfillTaxDetailsPersistence, Map[String, String]] , String]("formData", () => db, EitherLandfillTaxDetailsPersistenceMapStringString.format, implicitly[Format[String]]) with LandfillTaxRepository {
 
