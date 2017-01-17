@@ -28,29 +28,29 @@ import uk.gov.hmrc.play.frontend.controller.FrontendController
 import scala.concurrent.{ExecutionContext, Future}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.Action
-import uk.gov.hmrc.bforms.models.persistence.LandFillTaxDetailsPersistence
-import uk.gov.hmrc.bforms.repositories.LandFillTaxRepository
+import uk.gov.hmrc.bforms.models.persistence.LandfillTaxDetailsPersistence
+import uk.gov.hmrc.bforms.repositories.LandfillTaxRepository
 import reactivemongo.api.DB
 
 
 
 @Singleton
-class LandfillTaxForm @Inject()(val messagesApi: MessagesApi, repository: LandFillTaxRepository)(implicit ec: ExecutionContext, db : DB)
+class LandfillTaxForm @Inject()(val messagesApi: MessagesApi, repository: LandfillTaxRepository)(implicit ec: ExecutionContext, db : DB)
   extends FrontendController with I18nSupport {
 
-//  implicit val repo : LandFillTaxRepository = LandFillTaxRepository.apply(db
+//  implicit val repo : LandfillTaxRepository = LandfillTaxRepository.apply(db
 
-  implicit val y : TaxFormRetrieve[String, LandFillTaxDetailsPersistence, Map[String, String]] = TaxFormRetrieve.somethingElse(repository)
+  implicit val y : TaxFormRetrieve[String, LandfillTaxDetailsPersistence, Map[String, String]] = TaxFormRetrieve.somethingElse(repository)
   implicit val x : TaxFormSaveExit[Either[LandfillTaxDetails, Map[String, String]]] = TaxFormSaveExit.nameLater(repository)
 
   def landfillTaxFormDisplay(registrationNumber : String) = Action.async { implicit request =>
     val form = LandfillTaxDetails.form
     RetrieveService.retrieve(registrationNumber).flatMap {
-      case x : Either[Unit, Either[LandFillTaxDetailsPersistence, Map[String, String]]] => {
+      case x : Either[Unit, Either[LandfillTaxDetailsPersistence, Map[String, String]]] => {
         x match {
           case Right(Left(obj)) => {
             println("Right(list)")
-            val formData : LandFillTaxDetailsPersistence = obj
+            val formData : LandfillTaxDetailsPersistence = obj
             val filledForm = new LandfillTaxDetails(formData.registrationNumber.value,
               "",
               formData.firstName.value,

@@ -17,8 +17,8 @@
 package uk.gov.hmrc.bforms.service
 
 import play.api.Logger
-import uk.gov.hmrc.bforms.models.persistence.LandFillTaxDetailsPersistence
-import uk.gov.hmrc.bforms.repositories.LandFillTaxRepository
+import uk.gov.hmrc.bforms.models.persistence.LandfillTaxDetailsPersistence
+import uk.gov.hmrc.bforms.repositories.LandfillTaxRepository
 
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -35,20 +35,20 @@ object TaxFormRetrieve {
     }
   }
 
-  implicit def somethingElse(implicit repository: LandFillTaxRepository) : TaxFormRetrieve[String, LandFillTaxDetailsPersistence, Map[String, String]]  = {
+  implicit def somethingElse(implicit repository: LandfillTaxRepository) : TaxFormRetrieve[String, LandfillTaxDetailsPersistence, Map[String, String]]  = {
     retrieveTaxForm((f : String) =>  repository.get(f))
   }
 }
 
 object RetrieveService {
 
-  def retrieve[A, B, C](registrationNumber:A)(implicit taxFormRetrieve:TaxFormRetrieve[A, LandFillTaxDetailsPersistence, Map[String, String]]) : Future[Either[Unit, Either[LandFillTaxDetailsPersistence, Map[String, String]]]] = {
+  def retrieve[A, B, C](registrationNumber:A)(implicit taxFormRetrieve:TaxFormRetrieve[A, LandfillTaxDetailsPersistence, Map[String, String]]) : Future[Either[Unit, Either[LandfillTaxDetailsPersistence, Map[String, String]]]] = {
     taxFormRetrieve(registrationNumber).flatMap {
-      case obj: List[Either[LandFillTaxDetailsPersistence, Map[String, String]]] if(obj.isEmpty) => {
+      case obj: List[Either[LandfillTaxDetailsPersistence, Map[String, String]]] if(obj.isEmpty) => {
         println("emptyList")
         Future.successful(Left(()))
       }
-      case obj: List[Either[LandFillTaxDetailsPersistence, Map[String, String]]] => obj(0).fold(
+      case obj: List[Either[LandfillTaxDetailsPersistence, Map[String, String]]] => obj(0).fold(
         left => {
           println("left")
           Future.successful(Right(Left(left)))

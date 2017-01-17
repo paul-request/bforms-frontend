@@ -22,11 +22,7 @@ import org.apache.commons.lang3.RandomStringUtils
 import play.api.libs.json.{Format, JsError, JsResult, JsString, JsSuccess, JsValue, Json, _}
 import uk.gov.hmrc.bforms.models.EnvironmentalBody
 
-case class LandFillTaxDetailsPersistence(registrationNumber : GovernmentGatewayId = GovernmentGatewayId(RandomStringUtils.random(4)),
-                                         firstName : FirstName = new FirstName(""),
-                                         lastName : LastName = new LastName(""),
-                                         telephoneNumber: TelephoneNumber = new TelephoneNumber(""),
-                                         status: Status = new Status(""),
+case class LandfillTaxDetailsDeclarationPersistence(registrationNumber : GovernmentGatewayId = GovernmentGatewayId(RandomStringUtils.random(4)),
                                          nameOfBusiness: NameOfBusiness = new NameOfBusiness(""),
                                          accountingPeriodStartDate: LocalDate = LocalDate.now,
                                          accountingPeriodEndDate: LocalDate = LocalDate.now,
@@ -47,15 +43,11 @@ case class LandFillTaxDetailsPersistence(registrationNumber : GovernmentGatewayI
 }
 
 
-case class EitherLandfillTaxDetailsPersistenceMapStringString(value : Either[LandFillTaxDetailsPersistence, Map[String, String]])
+case class EitherLandfillTaxDetailsDeclarationPersistenceMapStringString(value : Either[LandfillTaxDetailsDeclarationPersistence, Map[String, String]])
 
-object LandFillTaxDetailsPersistence {
+object LandfillTaxDetailsDeclarationPersistence {
 
   def apply(governmentGateway : GovernmentGatewayId,
-            firstName:FirstName,
-            lastName:LastName,
-            telephoneNumber:TelephoneNumber,
-            status: Status,
             nameOfBusiness: NameOfBusiness,
             accountingPeriodStartDate: LocalDate,
             accountingPeriodEndDate: LocalDate,
@@ -72,11 +64,7 @@ object LandFillTaxDetailsPersistence {
             emailAddress: EmailAddress,
             confirmEmailAddress: ConfirmEmailAddress) = {
 
-    new LandFillTaxDetailsPersistence(governmentGateway,
-      firstName,
-      lastName,
-      telephoneNumber,
-      status,
+    new LandfillTaxDetailsDeclarationPersistence(governmentGateway,
       nameOfBusiness,
       accountingPeriodStartDate,
       accountingPeriodEndDate,
@@ -94,23 +82,23 @@ object LandFillTaxDetailsPersistence {
       confirmEmailAddress)
   }
 
-  val mongoFormat = Json.format[LandFillTaxDetailsPersistence]
+  val mongoFormat = Json.format[LandfillTaxDetailsDeclarationPersistence]
 }
 
-object EitherLandfillTaxDetailsPersistenceMapStringString {
+object EitherLandfillTaxDetailsDeclarationPersistenceMapStringString {
 
-  implicit val formatLandfill : Format[LandFillTaxDetailsPersistence] = LandFillTaxDetailsPersistence.mongoFormat
+  implicit val formatLandfill : Format[LandfillTaxDetailsDeclarationPersistence] = LandfillTaxDetailsDeclarationPersistence.mongoFormat
 
-  def apply(value: LandFillTaxDetailsPersistence) = new EitherLandfillTaxDetailsPersistenceMapStringString(Left(value))
+  def apply(value: LandfillTaxDetailsDeclarationPersistence) = new EitherLandfillTaxDetailsDeclarationPersistenceMapStringString(Left(value))
 
-  def apply(value: Map[String, String]) = new EitherLandfillTaxDetailsPersistenceMapStringString(Right(value))
+  def apply(value: Map[String, String]) = new EitherLandfillTaxDetailsDeclarationPersistenceMapStringString(Right(value))
 
-  implicit val format : Format[Either[LandFillTaxDetailsPersistence, Map[String, String]]] = ValueClassFormatEitherLandfillTaxDetailsPersistenceMapStringString.format[LandFillTaxDetailsPersistence, Map[String, String]]
+  implicit val format : Format[Either[LandfillTaxDetailsDeclarationPersistence, Map[String, String]]] = ValueClassFormatEitherLandfillTaxDetailsDeclarationPersistenceMapStringString.format[LandfillTaxDetailsDeclarationPersistence, Map[String, String]]
 }
 
-object ValueClassFormatEitherLandfillTaxDetailsPersistenceMapStringString {
+object ValueClassFormatEitherLandfillTaxDetailsDeclarationPersistenceMapStringString {
 
-  def format[A <:LandFillTaxDetailsPersistence, B <:Map[String, String]](implicit readL: Reads[A], readR: Reads[B], writeL: Writes[A], writeR: Writes[B]) : Format[Either[A, B]] = {
+  def format[A <:LandfillTaxDetailsDeclarationPersistence, B <:Map[String, String]](implicit readL: Reads[A], readR: Reads[B], writeL: Writes[A], writeR: Writes[B]) : Format[Either[A, B]] = {
     new Format[Either[A, B]] {
       def reads(json: JsValue) : JsResult[Either[A, B]] = {
         json match {

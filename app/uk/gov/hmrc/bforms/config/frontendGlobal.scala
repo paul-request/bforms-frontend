@@ -34,7 +34,7 @@ import uk.gov.hmrc.play.filters.MicroserviceFilterSupport
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
 import reactivemongo.api.DB
-import uk.gov.hmrc.bforms.repositories.{LandFillTaxRepository, LandFillTaxRepositoryImpl}
+import uk.gov.hmrc.bforms.repositories.{LandfillTaxRepository, LandfillTaxRepositoryImpl}
 import uk.gov.hmrc.bforms.service.TaxFormSaveExit
 
 
@@ -78,7 +78,7 @@ object AuditFilter extends FrontendAuditFilter with RunMode with AppName with Mi
 class Module() extends AbstractModule {
   def configure() = {
     bind(classOf[DB]).toProvider(classOf[MongoDbProvider]).asEagerSingleton()
-    bind(classOf[LandFillTaxRepository]).to(classOf[LandFillTaxRepositoryImpl])
+    bind(classOf[LandfillTaxRepository]).to(classOf[LandfillTaxRepositoryImpl])
   }
 }
 

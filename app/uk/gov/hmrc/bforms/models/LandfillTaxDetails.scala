@@ -22,11 +22,6 @@ import play.api.data.{Form, Mapping}
 import play.api.data.Forms._
 import play.api.libs.json.{Format, Json}
 
-case class EnvironmentalBody(bodyName: String, amount: BigDecimal)
-
-object EnvironmentalBody {
-  implicit val formats : Format[EnvironmentalBody] = Json.format[EnvironmentalBody]
-}
 case class LandfillTaxDetails(registrationNumber: String,
                                save:String,
                                firstName: String,
