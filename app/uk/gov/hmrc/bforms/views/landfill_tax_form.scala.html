@@ -53,7 +53,7 @@
                 id="lastname"
                 value="@landfillTaxForm("lastName").value"
                 class="form-control form-control--block"
-                <!--required-->
+                required
                 pattern="\S+"
                 >
             </label>
@@ -133,7 +133,7 @@
                 type="text"
                 name="accountingPeriodEndDate"
                 id="accountingPeriodEndDate"
-                value=""@{if(landfillTaxForm("accountingPeriodEndDate").value.toString.equals("Some(01/01/+1000000000)")){""}else{landfillTaxForm("accountingPeriodEndDate").value}}""
+                value="@{if(landfillTaxForm("accountingPeriodEndDate").value.toString.equals("Some(01/01/+1000000000)")){""}else{landfillTaxForm("accountingPeriodEndDate").value}}"
                 class="form-control form-control--block"
                 required
                 pattern="^(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\d\d$"
@@ -201,10 +201,12 @@
                 Total: £ <input type="label" name="total" id="total" value="0.00" style="border: rgba(1, 1, 1, 0); position: relative; color: black; background-color: white; outline: none !important; box-sizing: border-box;" readonly="readonly"/>
             </div>
 
+
             <script type="text/javascript">
                 function findTotal(){
                     var taxDue = document.getElementById('taxDueForThisPeriod').value;
                     var underDec = document.getElementById('underDeclarationsFromPreviousPeriod').value;
+
                     var tot = parseFloat(taxDue) + parseFloat(underDec);
 
                     if (!isNaN(tot)) {
@@ -212,6 +214,7 @@
                     } else {
                         document.getElementById('total').value = "0.00";
                     }
+
                    }
 
             </script>
@@ -242,7 +245,7 @@
                 type="text"
                 name="taxCreditClaimedForEnvironment"
                 id="taxCreditClaimedForEnvironment"
-                value="@{if(landfillTaxForm("taxCreditClaimedForEnvironment").value.toString.equals(Some("-1"))){""} else {landfillTaxForm("taxCreditClaimedForEnvironment").value.toString}}"
+                value="@{if(landfillTaxForm("taxCreditClaimedForEnvironment").value.toString.equals(Some("-1"))){""} else {landfillTaxForm("taxCreditClaimedForEnvironment").value}}"
                 class="form-control form-control--block"
                 required
                     pattern="[\d.]+"
@@ -293,13 +296,13 @@
             </div>
 
 
+
             <script type="text/javascript">
                 function findTotalCredits(){
                     var overDec = document.getElementById('overDeclarationsForThisPeriod').value;
                     var taxCredClaimed = document.getElementById('taxCreditClaimedForEnvironment').value;
                     var badDebt = document.getElementById('badDebtReliefClaimed').value;
                     var otherCred = document.getElementById('otherCredits').value;
-
                     var tot= parseFloat(overDec) + parseFloat(taxCredClaimed)+ parseFloat(badDebt) + parseFloat(otherCred);
 
                      if (!isNaN(tot)) {
@@ -307,7 +310,7 @@
                     } else {
                         document.getElementById('totalCredits').value = "0.00";
                     }
-
+                   
                    }
 
             </script>
@@ -324,7 +327,6 @@
                     } else {
                         document.getElementById('netDue').value = "0.00";
                     }
-
 
                    }
 
@@ -444,7 +446,7 @@
                 type="text"
                 name="emailAddress"
                 id="emailAddress"
-                value="@landfillTaxForm("emailAddress").value"
+                value="@{if(landfillTaxForm("emailAddress").value.toString.equals("Some(None)")){""}else{landfillTaxForm("emailAddress").value}}"
                 class="form-control form-control--block"
                 pattern="([^ @@]+@@[^ @@]+)?"
                 >
@@ -459,7 +461,7 @@
                 type="text"
                 name="confirmEmailAddress"
                 id="confirmEmailAddress"
-                value="@landfillTaxForm("confirmEmailAddress").value"
+                value="@{if(landfillTaxForm("confirmEmailAddress").value.toString.equals("Some(None)")){""}else{landfillTaxForm("confirmEmailAddress").value}}"
                 class="form-control form-control--block"
                 pattern="([^ @@]+@@[^ @@]+)?"
                 >
