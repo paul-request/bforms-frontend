@@ -35,4 +35,13 @@ class LandfillTax @Inject()(val messagesApi: MessagesApi)(implicit ec: Execution
   def landfillTaxSubmitContinue(registrationNumber: String) = Action.async {
     Future.successful(Redirect(routes.LandfillTaxForm.landfillTaxFormDisplay(registrationNumber)))
   }
+
+  def landfillTaxPersonSubmitContinue(registrationNumber: String) = Action.async {
+    Future.successful(Redirect(routes.LandfillTaxFormDeclaration.landfillTaxFormDeclarationDisplay(registrationNumber)))
+  }
+
+  def landfillTaxDeclarationSubmitContinue(registrationNumber: String) = Action.async {
+    Future.successful(Redirect(routes.LandfillTaxConfirmation.landfillTaxConfirmationDisplay(registrationNumber, "XYZ123zyx321")))
+  }
+
 }

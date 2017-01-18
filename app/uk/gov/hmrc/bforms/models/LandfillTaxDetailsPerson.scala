@@ -33,8 +33,7 @@ case class LandfillTaxDetailsPerson(registrationNumber: String,
 object LandfillTaxDetailsPerson {
   implicit val formats = Json.format[LandfillTaxDetailsPerson]
 
-  val landfillTaxDetailsMapping: Mapping[LandfillTaxDetailsPerson]
-  = {
+  val landfillTaxDetailsPersonMapping: Mapping[LandfillTaxDetailsPerson] = {
     mapping(
       "registrationNumber" -> nonEmptyText,
       "save" -> nonEmptyText,
@@ -44,5 +43,7 @@ object LandfillTaxDetailsPerson {
       "status" -> nonEmptyText
     )(LandfillTaxDetailsPerson.apply)(LandfillTaxDetailsPerson.unapply)
   }
+
+  val form = Form(landfillTaxDetailsPersonMapping)
 
 }

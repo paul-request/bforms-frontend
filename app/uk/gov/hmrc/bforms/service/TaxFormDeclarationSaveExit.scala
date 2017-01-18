@@ -17,31 +17,31 @@
 package uk.gov.hmrc.bforms.service
 
 import uk.gov.hmrc.bforms.repositories.LandfillTaxRepository
-import uk.gov.hmrc.bforms.models.LandfillTaxDetails
+import uk.gov.hmrc.bforms.models.LandfillTaxDetailsDeclaration
 
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 
-trait TaxFormSaveExit[A] {
+trait TaxFormDeclarationSaveExit[A] {
   def apply(a: A): Future[Either[String,Unit]]
 }
 
-object TaxFormSaveExit {
+object TaxFormDeclarationSaveExit {
 
-  private def getTaxFormSaveExit[A](f: A => Future[Either[String, Unit]]) : TaxFormSaveExit[A] = {
-    new TaxFormSaveExit[A] {
+  private def getTaxFormDeclarationSaveExit[A](f: A => Future[Either[String, Unit]]) : TaxFormDeclarationSaveExit[A] = {
+    new TaxFormDeclarationSaveExit[A] {
       def apply(params: A) : Future[Either[String, Unit]] = f(params)
     }
   }
 
-  implicit def nameLater(implicit repository: LandfillTaxRepository): TaxFormSaveExit[Either[LandfillTaxDetails, Map[String, String]]] = {
-    getTaxFormSaveExit((r : Either[LandfillTaxDetails, Map[String, String]]) =>  repository.store(r))
+  implicit def nameLater(implicit repository: LandfillTaxRepository): TaxFormDeclarationSaveExit[Either[LandfillTaxDetailsDeclaration, Map[String, String]]] = {
+    getTaxFormDeclarationSaveExit((r : Either[LandfillTaxDetailsDeclaration, Map[String, String]]) =>  repository.store(r))
   }
 }
 
-object SaveExit {
+object DeclarationSaveExit {
 
-  def saveForm[A, B](formDetails:Either[A, B])(implicit taxFormSaveExit:TaxFormSaveExit[Either[A, B]]):Future[Boolean] = {
+  def declarationSaveForm[A, B](formDetails:Either[A, B])(implicit taxFormSaveExit:TaxFormDeclarationSaveExit[Either[A, B]]):Future[Boolean] = {
     taxFormSaveExit(formDetails).map {
       case _ => true
       case x => false

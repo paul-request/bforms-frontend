@@ -17,31 +17,31 @@
 package uk.gov.hmrc.bforms.service
 
 import uk.gov.hmrc.bforms.repositories.LandfillTaxRepository
-import uk.gov.hmrc.bforms.models.LandfillTaxDetails
+import uk.gov.hmrc.bforms.models.LandfillTaxDetailsPerson
 
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 
-trait TaxFormSaveExit[A] {
+trait TaxFormPersonSaveExit[A] {
   def apply(a: A): Future[Either[String,Unit]]
 }
 
-object TaxFormSaveExit {
+object TaxFormPersonSaveExit {
 
-  private def getTaxFormSaveExit[A](f: A => Future[Either[String, Unit]]) : TaxFormSaveExit[A] = {
-    new TaxFormSaveExit[A] {
+  private def getTaxFormPersonSaveExit[A](f: A => Future[Either[String, Unit]]) : TaxFormPersonSaveExit[A] = {
+    new TaxFormPersonSaveExit[A] {
       def apply(params: A) : Future[Either[String, Unit]] = f(params)
     }
   }
 
-  implicit def nameLater(implicit repository: LandfillTaxRepository): TaxFormSaveExit[Either[LandfillTaxDetails, Map[String, String]]] = {
-    getTaxFormSaveExit((r : Either[LandfillTaxDetails, Map[String, String]]) =>  repository.store(r))
+  implicit def nameLater(implicit repository: LandfillTaxRepository): TaxFormPersonSaveExit[Either[LandfillTaxDetailsPerson, Map[String, String]]] = {
+    getTaxFormPersonSaveExit((r : Either[LandfillTaxDetailsPerson, Map[String, String]]) =>  repository.store(r))
   }
 }
 
-object SaveExit {
+object PersonSaveExit {
 
-  def saveForm[A, B](formDetails:Either[A, B])(implicit taxFormSaveExit:TaxFormSaveExit[Either[A, B]]):Future[Boolean] = {
+  def personSaveForm[A, B](formDetails:Either[A, B])(implicit taxFormSaveExit:TaxFormPersonSaveExit[Either[A, B]]):Future[Boolean] = {
     taxFormSaveExit(formDetails).map {
       case _ => true
       case x => false
