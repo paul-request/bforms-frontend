@@ -25,21 +25,23 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.Action
 import uk.gov.hmrc.bforms.models.persistence.LandfillTaxDetailsPersonPersistence
 import uk.gov.hmrc.bforms.models.{EnvironmentalBody, LandfillTaxDetailsPerson}
-import uk.gov.hmrc.bforms.repositories.LandfillTaxRepository
+import uk.gov.hmrc.bforms.repositories.LandfillTaxPersonRepository
 import uk.gov.hmrc.bforms.service._
 import uk.gov.hmrc.play.frontend.controller.FrontendController
+
+import reactivemongo.api.DB
 
 import scala.concurrent.{ExecutionContext, Future}
 
 
 @Singleton
-class LandfillTaxFormPerson @Inject()(val messagesApi: MessagesApi, repository: LandfillTaxRepository)(implicit ec: ExecutionContext, db : DB)
+class LandfillTaxFormPerson @Inject()(val messagesApi: MessagesApi, personRepository: LandfillTaxPersonRepository)(implicit ec: ExecutionContext, db : DB)
   extends FrontendController with I18nSupport {
 
 //  implicit val repo : LandfillTaxRepository = LandfillTaxRepository.apply(db
 
-  implicit val y : TaxFormPersonRetrieve[String, LandfillTaxDetailsPersonPersistence, Map[String, String]] = TaxFormPersonRetrieve.somethingElse(repository)
-  implicit val x : TaxFormPersonSaveExit[Either[LandfillTaxDetailsPerson, Map[String, String]]] = TaxFormPersonSaveExit.nameLater(repository)
+  implicit val y : TaxFormPersonRetrieve[String, LandfillTaxDetailsPersonPersistence, Map[String, String]] = TaxFormPersonRetrieve.somethingElse(personRepository)
+  implicit val x : TaxFormPersonSaveExit[Either[LandfillTaxDetailsPerson, Map[String, String]]] = TaxFormPersonSaveExit.nameLater(personRepository)
 
   def landfillTaxFormPersonDisplay(registrationNumber : String) = Action.async { implicit request =>
     val form = LandfillTaxDetailsPerson.form
@@ -95,7 +97,7 @@ class LandfillTaxFormPerson @Inject()(val messagesApi: MessagesApi, repository: 
         error => {
           println(error.data)
           val right: Right[LandfillTaxDetailsPerson, Map[String, String]] = Right(error.data)
-          repository.store(right)
+          personRepository.store(right)
           Future.successful(BadRequest(uk.gov.hmrc.bforms.views.html.landfill_tax_form_person(error, registrationNumber)))
         },
         content => {

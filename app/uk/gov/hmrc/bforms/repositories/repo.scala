@@ -21,17 +21,23 @@ import javax.inject.Inject
 
 import com.google.inject.Singleton
 import play.api.libs.json._
+import reactivemongo.api.DB
+import reactivemongo.bson.{BSONDocument, BSONObjectID}
 import uk.gov.hmrc.bforms.models._
-import uk.gov.hmrc.bforms.models.persistence.{LandfillTaxDetailsPersonPersistence, _}
+import uk.gov.hmrc.bforms.models.persistence._
 import uk.gov.hmrc.mongo.ReactiveRepository
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 @Singleton
-class LandfillTaxRepositoryImpl @Inject()(implicit db:DB) extends ReactiveRepository[Either[LandfillTaxDetailsPersistence, Map[String, String]] , String]("formData", () => db, EitherLandfillTaxDetailsPersistenceMapStringString.format, implicitly[Format[String]]) with LandfillTaxRepository {
+class LandfillTaxRepositoryImpl @Inject()(implicit db: DB)
+  extends ReactiveRepository[Either[LandfillTaxDetailsPersistence, Map[String, String]], String]("formData", () => db, EitherLandfillTaxDetailsPersistenceMapStringString.format, implicitly[Format[String]])
+    //    with ReactiveRepository[Either[LandfillTaxDetailsPersonPersistence, Map[String, String]], String]("formDataPerson", () => db, EitherLandfillTaxDetailsPersonPersistenceMapStringString.format, implicitly[Format[String]] )
+    //    with ReactiveRepository[Either[LandfillTaxDetailsDeclarationPersistence, Map[String, String]], String] ("formDataDeclaration", () => db, EitherLandfillTaxDetailsDeclarationPersistenceMapStringString.format, implicitly[Format[String]] )
+    with LandfillTaxRepository {
 
-  def store(form:Either[LandfillTaxDetails, Map[String, String]]) = {
+  def store(form: Either[LandfillTaxDetails, Map[String, String]]) = {
     form.fold(
       landfilltaxdetails => {
         val store = LandfillTaxDetailsPersistence(GovernmentGatewayId(landfilltaxdetails.registrationNumber),
@@ -57,10 +63,18 @@ class LandfillTaxRepositoryImpl @Inject()(implicit db:DB) extends ReactiveReposi
         )
         insert(Left(store)) map {
           case r if r.ok =>
-            logger.info(s"form with details of '${landfilltaxdetails.firstName}' & '${landfilltaxdetails.lastName}' was successfully stored")
+            logger.info(s"form with details of '${
+              landfilltaxdetails.firstName
+            }' & '${
+              landfilltaxdetails.lastName
+            }' was successfully stored")
             Right(())
           case r =>
-            logger.error(s"form with details of '${landfilltaxdetails.firstName}' & '${landfilltaxdetails.lastName}' was not successfully stored")
+            logger.error(s"form with details of '${
+              landfilltaxdetails.firstName
+            }' & '${
+              landfilltaxdetails.lastName
+            }' was not successfully stored")
             Left(r.message)
         }
       },
@@ -77,7 +91,48 @@ class LandfillTaxRepositoryImpl @Inject()(implicit db:DB) extends ReactiveReposi
     )
   }
 
-  def store(form:Either[LandfillTaxDetailsDeclaration, Map[String, String]]) = {
+  private def findByIdObject(id: GovernmentGatewayId): Future[List[Either[LandfillTaxDetailsPersistence, Map[String, String]]]] = {
+    find("object.registrationNumber" -> id)
+  }
+
+  private def findByIdMap(id: GovernmentGatewayId): Future[List[Either[LandfillTaxDetailsPersistence, Map[String, String]]]] = {
+    find("map.registrationNumber" -> id)
+  }
+
+  def get(id: String): Future[List[Either[LandfillTaxDetailsPersistence, Map[String, String]]]] = {
+    findByIdMap(GovernmentGatewayId(id)).flatMap {
+      case empty if (empty.isEmpty) => {
+        println("empty")
+        findByIdObject(GovernmentGatewayId(id)).flatMap {
+          case emptyList if (emptyList.isEmpty) => {
+            println("emptyList")
+            Future.successful(emptyList)
+          }
+          case fullList => {
+            println("fullList")
+            Future.successful(fullList)
+          }
+          case _ => {
+            println("someResponse")
+            Future.successful(empty)
+          }
+        }
+      }
+      case list: List[Either[LandfillTaxDetailsPersistence, Map[String, String]]] => {
+        println("list")
+        Future.successful(list)
+      }
+    }
+  }
+
+}
+
+@Singleton
+class LandfillTaxDeclarationRepositoryImpl @Inject()(implicit db: DB)
+  extends ReactiveRepository[Either[LandfillTaxDetailsDeclarationPersistence, Map[String, String]], String] ("formDataDeclaration", () => db, EitherLandfillTaxDetailsDeclarationPersistenceMapStringString.format, implicitly[Format[String]] )
+    with LandfillTaxDeclarationRepository {
+
+  def store(form: Either[LandfillTaxDetailsDeclaration, Map[String, String]]) = {
     form.fold(
       landfilltaxdetails => {
         val store = LandfillTaxDetailsDeclarationPersistence(GovernmentGatewayId(landfilltaxdetails.registrationNumber),
@@ -99,10 +154,14 @@ class LandfillTaxRepositoryImpl @Inject()(implicit db:DB) extends ReactiveReposi
         )
         insert(Left(store)) map {
           case r if r.ok =>
-            logger.info(s"form with details of '${landfilltaxdetails.nameOfBusiness}' was successfully stored")
+            logger.info(s"form with details of '${
+              landfilltaxdetails.nameOfBusiness
+            }' was successfully stored")
             Right(())
           case r =>
-            logger.error(s"form with details of '${landfilltaxdetails.nameOfBusiness}' was not successfully stored")
+            logger.error(s"form with details of '${
+              landfilltaxdetails.nameOfBusiness
+            }' was not successfully stored")
             Left(r.message)
         }
       },
@@ -119,7 +178,48 @@ class LandfillTaxRepositoryImpl @Inject()(implicit db:DB) extends ReactiveReposi
     )
   }
 
-  def store(form:Either[LandfillTaxDetailsPerson, Map[String, String]]) = {
+  private def findDeclarationByIdObject(id: GovernmentGatewayId): Future[List[Either[LandfillTaxDetailsDeclarationPersistence, Map[String, String]]]] = {
+    find("object.registrationNumber" -> id)
+  }
+
+  private def findDeclarationByIdMap(id: GovernmentGatewayId): Future[List[Either[LandfillTaxDetailsDeclarationPersistence, Map[String, String]]]] = {
+    find("map.registrationNumber" -> id)
+  }
+
+  def get(id: String): Future[List[Either[LandfillTaxDetailsDeclarationPersistence, Map[String, String]]]] = {
+    findDeclarationByIdMap(GovernmentGatewayId(id)).flatMap {
+      case empty if (empty.isEmpty) => {
+        println("empty")
+        findDeclarationByIdObject(GovernmentGatewayId(id)).flatMap {
+          case emptyList if (emptyList.isEmpty) => {
+            println("emptyList")
+            Future.successful(emptyList)
+          }
+          case fullList => {
+            println("fullList")
+            Future.successful(fullList)
+          }
+          case _ => {
+            println("someResponse")
+            Future.successful(empty)
+          }
+        }
+      }
+      case list: List[Either[LandfillTaxDetailsDeclarationPersistence, Map[String, String]]] => {
+        println("list")
+        Future.successful(list)
+      }
+    }
+  }
+
+}
+
+@Singleton
+class LandfillTaxPersonRepositoryImpl @Inject()(implicit db: DB)
+  extends ReactiveRepository[Either[LandfillTaxDetailsPersonPersistence, Map[String, String]], String]("formDataPerson", () => db, EitherLandfillTaxDetailsPersonPersistenceMapStringString.format, implicitly[Format[String]] )
+    with LandfillTaxPersonRepository {
+
+   def store(form: Either[LandfillTaxDetailsPerson, Map[String, String]]) = {
     form.fold(
       landfilltaxdetails => {
         val store = LandfillTaxDetailsPersonPersistence(GovernmentGatewayId(landfilltaxdetails.registrationNumber),
@@ -129,10 +229,18 @@ class LandfillTaxRepositoryImpl @Inject()(implicit db:DB) extends ReactiveReposi
           Status(landfilltaxdetails.status))
         insert(Left(store)) map {
           case r if r.ok =>
-            logger.info(s"form with details of '${landfilltaxdetails.firstName}' & '${landfilltaxdetails.lastName}' was successfully stored")
+            logger.info(s"form with details of '${
+              landfilltaxdetails.firstName
+            }' & '${
+              landfilltaxdetails.lastName
+            }' was successfully stored")
             Right(())
           case r =>
-            logger.error(s"form with details of '${landfilltaxdetails.firstName}' & '${landfilltaxdetails.lastName}' was not successfully stored")
+            logger.error(s"form with details of '${
+              landfilltaxdetails.firstName
+            }' & '${
+              landfilltaxdetails.lastName
+            }' was not successfully stored")
             Left(r.message)
         }
       },
@@ -149,88 +257,20 @@ class LandfillTaxRepositoryImpl @Inject()(implicit db:DB) extends ReactiveReposi
     )
   }
 
-  private def findByIdObject(id : GovernmentGatewayId): Future[List[Either[LandfillTaxDetailsPersistence, Map[String, String]]]] = {
+  private def findPersonByIdObject(id: GovernmentGatewayId): Future[List[Either[LandfillTaxDetailsPersonPersistence, Map[String, String]]]] = {
     find("object.registrationNumber" -> id)
   }
 
-  private def findPersonByIdObject(id : GovernmentGatewayId): Future[List[Either[LandfillTaxDetailsPersonPersistence, Map[String, String]]]] = {
-    find("object.registrationNumber" -> id)
-  }
-
-  private def findDeclarationByIdObject(id : GovernmentGatewayId): Future[List[Either[LandfillTaxDetailsDeclarationPersistence, Map[String, String]]]] = {
-    find("object.registrationNumber" -> id)
-  }
-
-  private def findByIdMap(id : GovernmentGatewayId): Future[List[Either[LandfillTaxDetailsPersistence, Map[String, String]]]] = {
+  private def findPersonByIdMap(id: GovernmentGatewayId): Future[List[Either[LandfillTaxDetailsPersonPersistence, Map[String, String]]]] = {
     find("map.registrationNumber" -> id)
   }
 
-  private def findPersonByIdMap(id : GovernmentGatewayId): Future[List[Either[LandfillTaxDetailsPersonPersistence, Map[String, String]]]] = {
-    find("map.registrationNumber" -> id)
-  }
-
-  private def findDeclaratiobnByIdMap(id : GovernmentGatewayId): Future[List[Either[LandfillTaxDetailsDeclarationPersistence, Map[String, String]]]] = {
-    find("map.registrationNumber" -> id)
-  }
-
-  def get(id : String) :Future[List[Either[LandfillTaxDetailsPersistence, Map[String, String]]]] = {
-    findByIdMap(GovernmentGatewayId(id)).flatMap {
-      case empty if(empty.isEmpty) => {
-        println("empty")
-        findByIdObject(GovernmentGatewayId(id)).flatMap{
-          case emptyList if(emptyList.isEmpty) => {
-            println("emptyList")
-            Future.successful(emptyList)
-          }
-          case fullList => {
-            println("fullList")
-            Future.successful(fullList)
-          }
-          case _ =>{
-            println("someResponse")
-            Future.successful(empty)
-          }
-        }
-      }
-      case list : List[Either[LandfillTaxDetailsPersistence, Map[String, String]]] => {
-        println("list")
-        Future.successful(list)
-      }
-    }
-  }
-
-  def get(id : String) :Future[List[Either[LandfillTaxDetailsDeclarationPersistence, Map[String, String]]]] = {
-    findDeclaratiobnByIdMap(GovernmentGatewayId(id)).flatMap {
-      case empty if(empty.isEmpty) => {
-        println("empty")
-        findDeclarationByIdObject(GovernmentGatewayId(id)).flatMap{
-          case emptyList if(emptyList.isEmpty) => {
-            println("emptyList")
-            Future.successful(emptyList)
-          }
-          case fullList => {
-            println("fullList")
-            Future.successful(fullList)
-          }
-          case _ =>{
-            println("someResponse")
-            Future.successful(empty)
-          }
-        }
-      }
-      case list : List[Either[LandfillTaxDetailsDeclarationPersistence, Map[String, String]]] => {
-        println("list")
-        Future.successful(list)
-      }
-    }
-  }
-
-  def get(id : String) :Future[List[Either[LandfillTaxDetailsPersonPersistence, Map[String, String]]]] = {
+  def get(id: String): Future[List[Either[LandfillTaxDetailsPersonPersistence, Map[String, String]]]] = {
     findPersonByIdMap(GovernmentGatewayId(id)).flatMap {
-      case empty if(empty.isEmpty) => {
+      case empty if (empty.isEmpty) => {
         println("empty")
-        findPersonByIdObject(GovernmentGatewayId(id)).flatMap{
-          case emptyList if(emptyList.isEmpty) => {
+        findPersonByIdObject(GovernmentGatewayId(id)).flatMap {
+          case emptyList if (emptyList.isEmpty) => {
             println("emptyList")
             Future.successful(emptyList)
           }
@@ -238,28 +278,41 @@ class LandfillTaxRepositoryImpl @Inject()(implicit db:DB) extends ReactiveReposi
             println("fullList")
             Future.successful(fullList)
           }
-          case _ =>{
+          case _ => {
             println("someResponse")
             Future.successful(empty)
           }
         }
       }
-      case list : List[Either[LandfillTaxDetailsPersonPersistence, Map[String, String]]] => {
+      case list: List[Either[LandfillTaxDetailsPersonPersistence, Map[String, String]]] => {
         println("list")
         Future.successful(list)
       }
     }
   }
+
 }
 
 trait LandfillTaxRepository {
 
-  def store(form : Either[LandfillTaxDetails, Map[String, String]]) : Future[Either[String, Unit]]
-  def store(form : Either[LandfillTaxDetailsDeclaration, Map[String, String]]) : Future[Either[String, Unit]]
-  def store(form : Either[LandfillTaxDetailsPerson, Map[String, String]]) : Future[Either[String, Unit]]
+  def store(form: Either[LandfillTaxDetails, Map[String, String]]): Future[Either[String, Unit]]
 
-  def get(registrationNumber : String) : Future[List[Either[LandfillTaxDetailsPersistence, Map[String, String]]]]
-  def get(registrationNumber : String) : Future[List[Either[LandfillTaxDetailsDeclarationPersistence, Map[String, String]]]]
-  def get(registrationNumber : String) : Future[List[Either[LandfillTaxDetailsPersonPersistence, Map[String, String]]]]
+  def get(registrationNumber: String): Future[List[Either[LandfillTaxDetailsPersistence, Map[String, String]]]]
+
+}
+
+trait LandfillTaxDeclarationRepository {
+
+  def store(form: Either[LandfillTaxDetailsDeclaration, Map[String, String]]): Future[Either[String, Unit]]
+
+  def get(registrationNumber: String): Future[List[Either[LandfillTaxDetailsDeclarationPersistence, Map[String, String]]]]
+
+}
+
+trait LandfillTaxPersonRepository {
+
+  def store(form: Either[LandfillTaxDetailsPerson, Map[String, String]]): Future[Either[String, Unit]]
+
+  def get(registrationNumber: String): Future[List[Either[LandfillTaxDetailsPersonPersistence, Map[String, String]]]]
 
 }

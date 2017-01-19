@@ -18,7 +18,7 @@ package uk.gov.hmrc.bforms.service
 
 import play.api.Logger
 import uk.gov.hmrc.bforms.models.persistence.LandfillTaxDetailsDeclarationPersistence
-import uk.gov.hmrc.bforms.repositories.LandfillTaxRepository
+import uk.gov.hmrc.bforms.repositories.LandfillTaxDeclarationRepository
 
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -35,7 +35,7 @@ object TaxFormDeclarationRetrieve {
     }
   }
 
-  implicit def somethingElse(implicit repository: LandfillTaxRepository) : TaxFormDeclarationRetrieve[String, LandfillTaxDetailsDeclarationPersistence, Map[String, String]]  = {
+  implicit def somethingElse(implicit repository: LandfillTaxDeclarationRepository) : TaxFormDeclarationRetrieve[String, LandfillTaxDetailsDeclarationPersistence, Map[String, String]]  = {
     retrieveTaxFormDeclaration((f : String) =>  repository.get(f))
   }
 }

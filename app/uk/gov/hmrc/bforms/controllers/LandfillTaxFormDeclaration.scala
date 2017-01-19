@@ -25,21 +25,23 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.Action
 import uk.gov.hmrc.bforms.models.persistence.LandfillTaxDetailsDeclarationPersistence
 import uk.gov.hmrc.bforms.models.{EnvironmentalBody, LandfillTaxDetailsDeclaration}
-import uk.gov.hmrc.bforms.repositories.LandfillTaxRepository
+import uk.gov.hmrc.bforms.repositories.LandfillTaxDeclarationRepository
 import uk.gov.hmrc.bforms.service._
 import uk.gov.hmrc.play.frontend.controller.FrontendController
+
+import reactivemongo.api.DB
 
 import scala.concurrent.{ExecutionContext, Future}
 
 
 @Singleton
-class LandfillTaxFormDeclaration @Inject()(val messagesApi: MessagesApi, repository: LandfillTaxRepository)(implicit ec: ExecutionContext, db : DB)
+class LandfillTaxFormDeclaration @Inject()(val messagesApi: MessagesApi, declarationRepository: LandfillTaxDeclarationRepository)(implicit ec: ExecutionContext, db : DB)
   extends FrontendController with I18nSupport {
 
   //  implicit val repo : LandfillTaxRepository = LandfillTaxRepository.apply(db
 
-  implicit val y: TaxFormDeclarationRetrieve[String, LandfillTaxDetailsDeclarationPersistence, Map[String, String]] = TaxFormDeclarationRetrieve.somethingElse(repository)
-  implicit val x: TaxFormDeclarationSaveExit[Either[LandfillTaxDetailsDeclaration, Map[String, String]]] = TaxFormDeclarationSaveExit.nameLater(repository)
+  implicit val y: TaxFormDeclarationRetrieve[String, LandfillTaxDetailsDeclarationPersistence, Map[String, String]] = TaxFormDeclarationRetrieve.somethingElse(declarationRepository)
+  implicit val x: TaxFormDeclarationSaveExit[Either[LandfillTaxDetailsDeclaration, Map[String, String]]] = TaxFormDeclarationSaveExit.nameLater(declarationRepository)
 
   def landfillTaxFormDeclarationDisplay(registrationNumber: String) = Action.async { implicit request =>
     val form = LandfillTaxDetailsDeclaration.form
@@ -143,7 +145,7 @@ class LandfillTaxFormDeclaration @Inject()(val messagesApi: MessagesApi, reposit
       error => {
         println(error.data)
         val right: Right[LandfillTaxDetailsDeclaration, Map[String, String]] = Right(error.data)
-        repository.store(right)
+        declarationRepository.store(right)
         Future.successful(BadRequest(uk.gov.hmrc.bforms.views.html.landfill_tax_form_declaration(error, registrationNumber)))
       },
       content => {

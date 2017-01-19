@@ -16,43 +16,39 @@
 
 package uk.gov.hmrc.bforms.controllers
 
+import helpers.Mongo
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.play.OneAppPerSuite
 import play.api.http.Status
 import play.api.i18n.MessagesApi
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import uk.gov.hmrc.bforms.models.LandfillTaxDetails
-import uk.gov.hmrc.bforms.repositories.LandfillTaxRepository
-import uk.gov.hmrc.bforms.models.persistence.LandfillTaxDetailsPersistence
+import uk.gov.hmrc.bforms.models.LandfillTaxDetailsDeclaration
+import uk.gov.hmrc.bforms.models.persistence.LandfillTaxDetailsDeclarationPersistence
+import uk.gov.hmrc.bforms.repositories.LandfillTaxDeclarationRepository
 import uk.gov.hmrc.play.test.UnitSpec
-
-import helpers.Mongo
-
-import reactivemongo.api.{DB, MongoConnection, FailoverStrategy}
-
 import scala.concurrent.{ExecutionContext, Future}
 
 
-class LandfillTaxFormControllerSpec extends UnitSpec with ScalaFutures with OneAppPerSuite with CSRFTest {
+class LandfillTaxFormDeclarationControllerSpec extends UnitSpec with ScalaFutures with OneAppPerSuite with CSRFTest {
 
   implicit val ec = app.injector.instanceOf[ExecutionContext]
   implicit val messagesApi = app.injector.instanceOf[MessagesApi]
 
   val fakeRequest = addToken(FakeRequest("GET", "/landfill-tax-form"))
 
-  "GET /landfill-tax-form" should {
+  "GET /landfill-tax-form-declaration" should {
     "return 200" in {
-      val controller = landfillTaxFormController
+      val controller = landfillTaxFormDeclarationController
 
-      val result = controller.landfillTaxFormDisplay("")(fakeRequest).futureValue
+      val result = controller.landfillTaxFormDeclarationDisplay("")(fakeRequest).futureValue
       status(result) shouldBe Status.OK
     }
 
     "return HTML" in {
-      val controller = landfillTaxFormController
+      val controller = landfillTaxFormDeclarationController
 
-      val result = controller.landfillTaxFormDisplay("YZAL123")(fakeRequest)
+      val result = controller.landfillTaxFormDeclarationDisplay("YZAL123")(fakeRequest)
       contentType(result) shouldBe Some("text/html")
       charset(result) shouldBe Some("utf-8")
       contentAsString(result) should include("landfill tax")
@@ -60,18 +56,18 @@ class LandfillTaxFormControllerSpec extends UnitSpec with ScalaFutures with OneA
     }
   }
 
-  def landfillTaxFormController(implicit messagesApi: MessagesApi) = {
+  def landfillTaxFormDeclarationController(implicit messagesApi: MessagesApi) = {
     implicit val db = Mongo.stubDb
 
-    val stubRepository = new LandfillTaxRepository {
-      def get(registrationNumber: String): Future[List[Either[LandfillTaxDetailsPersistence, Map[String, String]]]] =
-        Future.successful(List(Left(new LandfillTaxDetailsPersistence())))
+    val stubRepository = new LandfillTaxDeclarationRepository {
+      def get(registrationNumber: String): Future[List[Either[LandfillTaxDetailsDeclarationPersistence, Map[String, String]]]] =
+        Future.successful(List(Left(new LandfillTaxDetailsDeclarationPersistence())))
 
-      def store(form: Either[LandfillTaxDetails, Map[String, String]]): Future[Either[String, Unit]] =
+      def store(form: Either[LandfillTaxDetailsDeclaration, Map[String, String]]): Future[Either[String, Unit]] =
         Future.successful(Right(()))
     }
 
-    new LandfillTaxForm(messagesApi, stubRepository)
+    new LandfillTaxFormDeclaration(messagesApi, stubRepository)
   }
 
 
