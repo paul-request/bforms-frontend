@@ -16,7 +16,6 @@
 
 package uk.gov.hmrc.bforms.controllers
 
-import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 import javax.inject.{Inject, Singleton}
@@ -24,7 +23,7 @@ import javax.inject.{Inject, Singleton}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.Action
 import uk.gov.hmrc.bforms.models.persistence.LandfillTaxDetailsPersonPersistence
-import uk.gov.hmrc.bforms.models.{EnvironmentalBody, LandfillTaxDetailsPerson}
+import uk.gov.hmrc.bforms.models.LandfillTaxDetailsPerson
 import uk.gov.hmrc.bforms.repositories.LandfillTaxPersonRepository
 import uk.gov.hmrc.bforms.service._
 import uk.gov.hmrc.play.frontend.controller.FrontendController

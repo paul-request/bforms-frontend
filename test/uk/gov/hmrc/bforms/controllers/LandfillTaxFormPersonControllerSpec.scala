@@ -38,7 +38,7 @@ class LandfillTaxFormPersonControllerSpec extends UnitSpec with ScalaFutures wit
 
   val fakeRequest = addToken(FakeRequest("GET", "/landfill-tax-form"))
 
-  "GET /landfill-tax-form-Person" should {
+  "GET /landfill-tax-form-person" should {
     "return 200" in {
       val controller = landfillTaxFormPersonController
 

@@ -21,7 +21,7 @@ import java.time.format.DateTimeFormatter
 import java.util.Locale
 import javax.inject.{Inject, Singleton}
 
-import uk.gov.hmrc.bforms.models.{EnvironmentalBody, Error, LandfillTaxDetails}
+import uk.gov.hmrc.bforms.models.{EnvironmentalBody, LandfillTaxDetails}
 import uk.gov.hmrc.bforms.service._
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 

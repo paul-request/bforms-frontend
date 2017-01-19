@@ -18,9 +18,7 @@ package uk.gov.hmrc.bforms.models.persistence
 
 import java.time.LocalDate
 
-import org.apache.commons.lang3.RandomStringUtils
 import play.api.libs.json.{Format, JsError, JsResult, JsString, JsSuccess, JsValue, Json, _}
-import uk.gov.hmrc.bforms.models.EnvironmentalBody
 
 case class EnvironmentalBodyPersistence(bodyName:BodyName, amount:Amount)
 

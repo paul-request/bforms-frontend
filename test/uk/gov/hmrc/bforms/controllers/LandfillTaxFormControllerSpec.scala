@@ -29,8 +29,6 @@ import uk.gov.hmrc.play.test.UnitSpec
 
 import helpers.Mongo
 
-import reactivemongo.api.{DB, MongoConnection, FailoverStrategy}
-
 import scala.concurrent.{ExecutionContext, Future}
 
 

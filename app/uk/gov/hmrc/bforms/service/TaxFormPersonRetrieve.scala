@@ -16,7 +16,6 @@
 
 package uk.gov.hmrc.bforms.service
 
-import play.api.Logger
 import uk.gov.hmrc.bforms.models.persistence.LandfillTaxDetailsPersonPersistence
 import uk.gov.hmrc.bforms.repositories.LandfillTaxPersonRepository
 

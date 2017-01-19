@@ -19,8 +19,7 @@ package uk.gov.hmrc.bforms.models.persistence
 import java.time.LocalDate
 
 import org.apache.commons.lang3.RandomStringUtils
-import play.api.libs.json.{Format, JsError, JsResult, JsString, JsSuccess, JsValue, Json, _}
-import uk.gov.hmrc.bforms.models.EnvironmentalBody
+import play.api.libs.json.{Format, JsError, JsResult, JsValue, Json, _}
 
 case class LandfillTaxDetailsPersonPersistence(registrationNumber: GovernmentGatewayId = GovernmentGatewayId(RandomStringUtils.random(4)),
                                                firstName: FirstName = new FirstName(""),

@@ -18,9 +18,6 @@ package uk.gov.hmrc.bforms.models
 
 import uk.gov.hmrc.bforms.models.persistence._
 
-/**
-  * Created by daniel-connelly on 11/01/17.
-  */
 class Error() {
 
 }
