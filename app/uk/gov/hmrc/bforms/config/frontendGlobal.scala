@@ -34,8 +34,7 @@ import uk.gov.hmrc.play.filters.MicroserviceFilterSupport
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
 import reactivemongo.api.DB
-import uk.gov.hmrc.bforms.repositories.{LandfillTaxRepository, LandfillTaxRepositoryImpl}
-import uk.gov.hmrc.bforms.service.TaxFormDeclarationSaveExit$
+import uk.gov.hmrc.bforms.repositories._
 
 
 object FrontendGlobal
@@ -79,6 +78,8 @@ class Module() extends AbstractModule {
   def configure() = {
     bind(classOf[DB]).toProvider(classOf[MongoDbProvider]).asEagerSingleton()
     bind(classOf[LandfillTaxRepository]).to(classOf[LandfillTaxRepositoryImpl])
+    bind(classOf[LandfillTaxDeclarationRepository]).to(classOf[LandfillTaxDeclarationRepositoryImpl])
+    bind(classOf[LandfillTaxPersonRepository]).to(classOf[LandfillTaxPersonRepositoryImpl])
   }
 }
 

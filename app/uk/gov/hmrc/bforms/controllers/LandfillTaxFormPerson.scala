@@ -112,7 +112,7 @@ class LandfillTaxFormPerson @Inject()(val messagesApi: MessagesApi, personReposi
                 val formWithErrors = LandfillTaxDetailsPerson.form.withGlobalError(errorMessage)
                 BadRequest(uk.gov.hmrc.bforms.views.html.landfill_tax_form_person(formWithErrors, registrationNumber))
               case PersonSubmissionResult(noErrors, Some(submissionAcknowledgement)) =>
-                Redirect(routes.LandfillTaxConfirmation.landfillTaxConfirmationDisplay(registrationNumber, submissionAcknowledgement))
+                Redirect(routes.LandfillTaxFormDeclaration.landfillTaxFormDeclarationDisplay(registrationNumber))
             }
           } else {
             Future.successful(Ok("Failed"))
