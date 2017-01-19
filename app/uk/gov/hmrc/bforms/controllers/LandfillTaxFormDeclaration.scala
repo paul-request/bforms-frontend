@@ -35,7 +35,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 
 @Singleton
-class LandfillTaxFormDeclaration @Inject()(val messagesApi: MessagesApi, declarationRepository: LandfillTaxDeclarationRepository)(implicit ec: ExecutionContext, db : DB)
+class LandfillTaxFormDeclaration @Inject()(val messagesApi: MessagesApi, declarationRepository: LandfillTaxDeclarationRepository)(implicit ec: ExecutionContext, db: DB)
   extends FrontendController with I18nSupport {
 
   //  implicit val repo : LandfillTaxRepository = LandfillTaxRepository.apply(db
@@ -153,15 +153,18 @@ class LandfillTaxFormDeclaration @Inject()(val messagesApi: MessagesApi, declara
         if (content.save.equals("Exit")) {
           DeclarationSaveExit.declarationSaveForm(Left(content))(x) map {
             case false => Ok("Failed")
-            case true => Ok("Worked")
+            case true => Redirect(routes.LandfillTax.landfillTaxDisplay(registrationNumber))
           }
         } else if (content.save.equals("Continue")) {
-          TaxFormDeclarationSubmission.submitTaxForm(content).map {
+          TaxFormDeclarationSubmission.submitTaxForm(content).flatMap {
             case DeclarationSubmissionResult(Some(errorMessage), _) =>
               val formWithErrors = LandfillTaxDetailsDeclaration.form.withGlobalError(errorMessage)
-              BadRequest(uk.gov.hmrc.bforms.views.html.landfill_tax_form_declaration(formWithErrors, registrationNumber))
+              Future.successful(BadRequest(uk.gov.hmrc.bforms.views.html.landfill_tax_form_declaration(formWithErrors, registrationNumber)))
             case DeclarationSubmissionResult(noErrors, Some(submissionAcknowledgement)) =>
-              Redirect(routes.LandfillTaxConfirmation.landfillTaxConfirmationDisplay(registrationNumber, submissionAcknowledgement))
+              DeclarationSaveExit.declarationSaveForm(Left(content))(x) map {
+                case false => Ok("Failed")
+                case true => Redirect(routes.LandfillTaxConfirmation.landfillTaxConfirmationDisplay(registrationNumber, submissionAcknowledgement))
+              }
           }
         } else {
           Future.successful(Ok("Failed"))
