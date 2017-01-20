@@ -60,31 +60,35 @@ class LandfillTaxRepositoryImpl @Inject()(implicit db: DB)
           EmailAddress(landfilltaxdetails.emailAddress.getOrElse("None")),
           ConfirmEmailAddress(landfilltaxdetails.confirmEmailAddress.getOrElse("None"))
         )
-        insert(Left(store)) map {
-          case r if r.ok =>
-            logger.info(s"form with details of '${
-              landfilltaxdetails.firstName
-            }' & '${
-              landfilltaxdetails.lastName
-            }' was successfully stored")
-            Right(())
-          case r =>
-            logger.error(s"form with details of '${
-              landfilltaxdetails.firstName
-            }' & '${
-              landfilltaxdetails.lastName
-            }' was not successfully stored")
-            Left(r.message)
+        drop.flatMap { x =>
+          insert(Left(store)) map {
+            case r if r.ok =>
+              logger.info(s"form with details of '${
+                landfilltaxdetails.firstName
+              }' & '${
+                landfilltaxdetails.lastName
+              }' was successfully stored")
+              Right(())
+            case r =>
+              logger.error(s"form with details of '${
+                landfilltaxdetails.firstName
+              }' & '${
+                landfilltaxdetails.lastName
+              }' was not successfully stored")
+              Left(r.message)
+          }
         }
       },
       Map => {
-        insert(Right(Map)) map {
-          case r if r.ok =>
-            logger.info(s"map of a form in database")
-            Right(())
-          case r =>
-            logger.error(s"map not put into databse")
-            Left(r.message)
+        drop.flatMap { x =>
+          insert(Right(Map)) map {
+            case r if r.ok =>
+              logger.info(s"map of a form in database")
+              Right(())
+            case r =>
+              logger.error(s"map not put into databse")
+              Left(r.message)
+          }
         }
       }
     )
@@ -128,7 +132,7 @@ class LandfillTaxRepositoryImpl @Inject()(implicit db: DB)
 
 @Singleton
 class LandfillTaxDeclarationRepositoryImpl @Inject()(implicit db: DB)
-  extends ReactiveRepository[Either[LandfillTaxDetailsDeclarationPersistence, Map[String, String]], String] ("formDataDeclaration", () => db, EitherLandfillTaxDetailsDeclarationPersistenceMapStringString.format, implicitly[Format[String]] )
+  extends ReactiveRepository[Either[LandfillTaxDetailsDeclarationPersistence, Map[String, String]], String]("formDataDeclaration", () => db, EitherLandfillTaxDetailsDeclarationPersistenceMapStringString.format, implicitly[Format[String]])
     with LandfillTaxDeclarationRepository {
 
   def store(form: Either[LandfillTaxDetailsDeclaration, Map[String, String]]) = {
@@ -151,27 +155,31 @@ class LandfillTaxDeclarationRepositoryImpl @Inject()(implicit db: DB)
           EmailAddress(landfilltaxdetails.emailAddress.getOrElse("None")),
           ConfirmEmailAddress(landfilltaxdetails.confirmEmailAddress.getOrElse("None"))
         )
-        insert(Left(store)) map {
-          case r if r.ok =>
-            logger.info(s"form with details of '${
-              landfilltaxdetails.nameOfBusiness
-            }' was successfully stored")
-            Right(())
-          case r =>
-            logger.error(s"form with details of '${
-              landfilltaxdetails.nameOfBusiness
-            }' was not successfully stored")
-            Left(r.message)
+        drop.flatMap { x =>
+          insert(Left(store)) map {
+            case r if r.ok =>
+              logger.info(s"form with details of '${
+                landfilltaxdetails.nameOfBusiness
+              }' was successfully stored")
+              Right(())
+            case r =>
+              logger.error(s"form with details of '${
+                landfilltaxdetails.nameOfBusiness
+              }' was not successfully stored")
+              Left(r.message)
+          }
         }
       },
       Map => {
-        insert(Right(Map)) map {
-          case r if r.ok =>
-            logger.info(s"map of a form in database")
-            Right(())
-          case r =>
-            logger.error(s"map not put into databse")
-            Left(r.message)
+        drop.flatMap { x =>
+          insert(Right(Map)) map {
+            case r if r.ok =>
+              logger.info(s"map of a form in database")
+              Right(())
+            case r =>
+              logger.error(s"map not put into databse")
+              Left(r.message)
+          }
         }
       }
     )
@@ -215,10 +223,10 @@ class LandfillTaxDeclarationRepositoryImpl @Inject()(implicit db: DB)
 
 @Singleton
 class LandfillTaxPersonRepositoryImpl @Inject()(implicit db: DB)
-  extends ReactiveRepository[Either[LandfillTaxDetailsPersonPersistence, Map[String, String]], String]("formDataPerson", () => db, EitherLandfillTaxDetailsPersonPersistenceMapStringString.format, implicitly[Format[String]] )
+  extends ReactiveRepository[Either[LandfillTaxDetailsPersonPersistence, Map[String, String]], String]("formDataPerson", () => db, EitherLandfillTaxDetailsPersonPersistenceMapStringString.format, implicitly[Format[String]])
     with LandfillTaxPersonRepository {
 
-   def store(form: Either[LandfillTaxDetailsPerson, Map[String, String]]) = {
+  def store(form: Either[LandfillTaxDetailsPerson, Map[String, String]]) = {
     form.fold(
       landfilltaxdetails => {
         val store = LandfillTaxDetailsPersonPersistence(GovernmentGatewayId(landfilltaxdetails.registrationNumber),
@@ -226,31 +234,35 @@ class LandfillTaxPersonRepositoryImpl @Inject()(implicit db: DB)
           LastName(landfilltaxdetails.lastName),
           TelephoneNumber(landfilltaxdetails.telephoneNumber),
           Status(landfilltaxdetails.status))
-        insert(Left(store)) map {
-          case r if r.ok =>
-            logger.info(s"form with details of '${
-              landfilltaxdetails.firstName
-            }' & '${
-              landfilltaxdetails.lastName
-            }' was successfully stored")
-            Right(())
-          case r =>
-            logger.error(s"form with details of '${
-              landfilltaxdetails.firstName
-            }' & '${
-              landfilltaxdetails.lastName
-            }' was not successfully stored")
-            Left(r.message)
+        drop.flatMap { x =>
+          insert(Left(store)) map {
+            case r if r.ok =>
+              logger.info(s"form with details of '${
+                landfilltaxdetails.firstName
+              }' & '${
+                landfilltaxdetails.lastName
+              }' was successfully stored")
+              Right(())
+            case r =>
+              logger.error(s"form with details of '${
+                landfilltaxdetails.firstName
+              }' & '${
+                landfilltaxdetails.lastName
+              }' was not successfully stored")
+              Left(r.message)
+          }
         }
       },
       Map => {
-        insert(Right(Map)) map {
-          case r if r.ok =>
-            logger.info(s"map of a form in database")
-            Right(())
-          case r =>
-            logger.error(s"map not put into databse")
-            Left(r.message)
+        drop.flatMap { x =>
+          insert(Right(Map)) map {
+            case r if r.ok =>
+              logger.info(s"map of a form in database")
+              Right(())
+            case r =>
+              logger.error(s"map not put into databse")
+              Left(r.message)
+          }
         }
       }
     )
