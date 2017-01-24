@@ -38,6 +38,10 @@ object FrontendGlobal
   override val loggingFilter = LoggingFilter
   override val frontendAuditFilter = AuditFilter
 
+//  override lazy val enableSecurityHeaderFilter = false
+
+//  override val frontendFilters = Seq()
+
   override def onStart(app: Application) {
     super.onStart(app)
     ApplicationCrypto.verifyConfiguration()
