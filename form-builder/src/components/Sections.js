@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import React from 'react';
-import { getSections } from '../reducers';
+import { getSectionsByFormId } from '../reducers';
 import Section from './Section';
 import { addSection } from '../actions';
 
@@ -18,11 +18,11 @@ const Sections = ({ formId, sections, onAddSectionClick }) => (
   </div>
 );
 
-const mapStateToProps = (state, ownProps) => {
-  console.log('SECTIONS MSTP', ownProps)
+const mapStateToProps = (state, { formId }) => {
+  console.log('SECTIONS MSTP', formId)
   return {
-    sections: getSections(state),
-    formId: ownProps.formId,
+    sections: getSectionsByFormId(state, formId),
+    formId,
   };
 };
 

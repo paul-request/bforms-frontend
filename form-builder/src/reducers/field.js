@@ -7,6 +7,13 @@ const initialState = {
 
 const field = (state = initialState, action) => {
   switch (action.type) {
+    case 'EDIT_FIELD':
+      const id = action.payload.field.id;
+
+      return {
+        ...state,
+        id,
+      };
     case 'ADD_FIELD':
       const { payload } = action;
       const { fieldId } = payload;
@@ -14,7 +21,7 @@ const field = (state = initialState, action) => {
       return {
         ...state,
         id: fieldId,
-      }
+      };
     default:
       return state;
   }

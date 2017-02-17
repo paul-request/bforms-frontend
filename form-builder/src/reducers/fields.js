@@ -5,6 +5,11 @@ const byId = (state = {}, action) => {
   const { payload } = action;
 
   switch (action.type) {
+    case 'EDIT_FIELD':
+      return {
+        ...state,
+        [payload.field.id]: field(state[payload.field.id], action),
+      };
     case 'ADD_FIELD':
       return {
         ...state,
@@ -19,6 +24,8 @@ const allIds = (state = [], action) => {
   const { payload } = action;
 
   switch (action.type) {
+    case 'EDIT_FIELD':
+      return [...state, payload.field.id];
     case 'ADD_FIELD':
       return [...state, payload.fieldId];
     default:

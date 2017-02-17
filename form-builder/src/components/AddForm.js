@@ -1,60 +1,138 @@
-import React, { PropTypes } from 'react';
+import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
-import { addForm } from '../actions';
+import { createForm, editForm, editSection, editField } from '../actions';
 import { browserHistory } from 'react-router';
 
-const AddForm = (data) => {
-  let title, description, formData;
+class AddForm extends Component {
+  constructor() {
+    super();
 
-  return (
-    <div>
-      <form
-        onSubmit={e => {
-          e.preventDefault();
+    this.state = {
+      startFromScratch: true,
+      title: null,
+      description: null,
+      formData: null,
+      errors: [],
+    };
+  }
 
-          const hasDetails = title.value.trim() || description.value.trim();
-          const hasData = formData.value;
+  toggleForm = (e) => {
+    e.preventDefault();
 
-          if (!hasDetails && !hasData) return;
+    this.setState(prevState => ({
+      startFromScratch: !prevState.startFromScratch,
+    }));
+  }
 
-          const addFormAction = addForm({
-            formName: title.value,
-            description: description.value,
-            formData: formData.value,
+  handleNewSubmit = (e) => {
+    e.preventDefault();
+
+    const { title, description } = this.state;
+    const hasDetails = title.value.trim() || description.value.trim();
+
+    if (!hasDetails) return;
+
+    const data = {
+      formName: title.value,
+      description: description.value,
+    };
+    const action = createForm(data);
+
+    this.props.dispatch(action);
+    browserHistory.push(`/form-builder/${action.payload.form.id}`);
+  }
+
+  handleExistingSubmit = (e) => {
+    e.preventDefault();
+
+    const { formData } = this.state;
+    const hasData = formData.value;
+
+    if (!hasData) return;
+
+    // TODO: handle invalid JSON with try catch and return an error to display to the user?
+    // Need to work out a good way to do this...
+    // Maybe some sort of overall validation on submit?
+
+    // if isValid, else add error and display somehow. Look it up
+    // Actually need to go through, chec k the structure and use correct JSON format here
+    const data = JSON.parse(formData.value);
+    const action = editForm(data);
+
+    this.props.dispatch(action);
+console.log('BEFORE ACTION', action)
+
+    if (action.payload.form.sections) {
+      action.payload.form.sections.forEach(section => {
+        console.log('SECTION:', section)
+        const editSectionAction = editSection(section, action.payload.form.id);
+        this.props.dispatch(editSectionAction);
+
+        if (section.fields) {
+          console.log('ADD FORM: SECTION>FIELDS', section.fields)
+          section.fields.forEach(field => {
+            const editFieldAction = editField(field, editSectionAction.payload.section.id);
+            this.props.dispatch(editFieldAction);
           });
+        }
+      });
+    }
 
-          console.log('ADD FORM', addFormAction)
 
-          data.dispatch(addFormAction);
+    //this.submit(action);
+  }
 
-          browserHistory.push(`/form-builder/${addFormAction.payload.form.id}`);
-        }}>
-        <h2 className="heading-small">Create a form from scratch</h2>
+  render() {
+    return (
+      <div>
+        <div className={`${this.state.startFromScratch ? '' : 'js-hidden'}`}>
+          <form onSubmit={(e) => this.handleNewSubmit(e)}>
+            <div className="section">
+              <h2 className="heading-small">Create a form from scratch</h2>
 
-        <div className="form-group">
-          <label htmlFor="form-title" className="formControl">Title</label>
-          <input id="form-title" className="form-control" ref={node => { title = node; }} />
+              <div className="form-group">
+                <label htmlFor="form-title" className="formControl">Title</label>
+                <input id="form-title" className="form-control" ref={node => { this.state.title = node; }} />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="form-desc" className="formControl">Description</label>
+                <input id="form-desc" className="form-control" ref={node => { this.state.description = node; }} />
+              </div>
+
+              <div className="form-group">
+                <button type="submit" className="button">Create form</button>
+              </div>
+
+              <p><a href="#" onClick={this.toggleForm}>Or edit an existing form</a></p>
+            </div>
+          </form>
         </div>
 
-        <div className="form-group">
-          <label htmlFor="form-desc" className="formControl">Description</label>
-          <input id="form-desc" className="form-control" ref={node => { description = node; }} />
+        <div className={`${this.state.startFromScratch ? 'js-hidden' : ''}`}>
+          <form onSubmit={(e) => this.handleExistingSubmit(e)}>
+            <div className="section">
+              <h2 className="heading-small">Edit an existing form</h2>
+
+              <div className="form-group">
+                <textarea id="form-data"
+                          name="form-data"
+                          className="form-control"
+                          ref={node => { this.state.formData = node; }}>
+                </textarea>
+              </div>
+
+              <div className="form-group">
+                <button type="submit" className="button">Create form</button>
+              </div>
+
+              <p><a href="#" onClick={this.toggleForm}>Or start from scratch</a></p>
+            </div>
+          </form>
         </div>
-
-        <h2 className="heading-small">Or paste existing form data</h2>
-
-        <div className="form-group">
-          <textarea id="form-data"
-                    name="form-data"
-                    className="form-control"
-                    ref={node => { formData = node; }}>
-          </textarea>
-        </div>
-
-        <button type="submit" className="button">Start editing my form!</button>
-      </form>
-    </div>
-  );
-};
+      </div>
+    );
+  }
+}
 
 export default connect()(AddForm);

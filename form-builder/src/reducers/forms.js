@@ -6,12 +6,13 @@ const byId = (state = {}, action) => {
 
   switch (action.type) {
     case 'ADD_FORM':
+      console.log('PAUL TEST', state, action)
       return {
         ...state,
         [payload.form.id]: form(state[action.id], action),
       };
     case 'ADD_SECTION':
-    console.log('ADD SECTION payload', state, payload)
+      console.log('ADD SECTION payload', state, payload)
       const { sectionId, formId } = payload;
       const sectionForm = state[formId];
 
@@ -45,7 +46,10 @@ const forms = combineReducers({
 
 export default forms;
 
-export const getForms = (state) =>
-  state.allIds.map(id => state.byId[id]);
+export const getForms = (state) => {
+  return state.allIds.map(id => state.byId[id]);
+};
 
-export const getFormById = (state, formId) => state.byId[formId];
+export const getFormById = (state, id) => {
+  return state.byId[id];
+};

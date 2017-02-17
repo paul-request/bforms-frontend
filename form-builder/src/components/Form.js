@@ -2,6 +2,7 @@ import { connect } from 'react-redux';
 import React, { Component } from 'react';
 import Sections from './Sections';
 import { withRouter } from 'react-router';
+import { getFormById } from '../reducers';
 
 const Form = ({ form }) => (
   <div>
@@ -13,10 +14,11 @@ const Form = ({ form }) => (
 );
 
 const mapStateToProps = (state, { params }) => {
-  // TODO: replace with a getForm()
   return {
-    form: state.forms.byId[params.formId],
+    form: getFormById(state, params.formId),
   };
 };
 
-export default withRouter(connect(mapStateToProps)(Form));
+export default withRouter(
+  connect(mapStateToProps)(Form)
+);

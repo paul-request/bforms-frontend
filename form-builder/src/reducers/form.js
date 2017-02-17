@@ -11,13 +11,15 @@ const form = (state = initialState, action) => {
 
   switch (action.type) {
     case 'ADD_FORM':
-      const { id, formName, description } = payload.form;
+      const { id, formName, description, sections = [] } = payload.form;
+      const sectionIds = sections.map(section => section.id);
 
       return {
         ...state,
         id,
         formName,
         description,
+        sections: sectionIds,
       };
     default:
       return state;

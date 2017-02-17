@@ -14,11 +14,12 @@ const Fields = ({ sectionId, fields, onAddFieldClick }) => (
     <button className="button"
             onClick={() => onAddFieldClick(sectionId)}>
       Add field
-    /button>
+    </button>
   </div>
 );
 
 const mapStateToProps = (state, ownProps) => {
+  console.log('FIELDS MSTP', getFieldBySectionId(state, ownProps.sectionId))
   return {
     fields: getFieldBySectionId(state, ownProps.sectionId),
     sectionId: ownProps.sectionId,
