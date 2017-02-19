@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import React from 'react';
 import { getFieldBySectionId } from '../reducers';
 import Field from './Field';
-import { addField } from '../actions';
+import { createField } from '../actions';
 
 const Fields = ({ sectionId, fields, onAddFieldClick }) => (
   <div>
@@ -18,17 +18,17 @@ const Fields = ({ sectionId, fields, onAddFieldClick }) => (
   </div>
 );
 
-const mapStateToProps = (state, ownProps) => {
-  console.log('FIELDS MSTP', getFieldBySectionId(state, ownProps.sectionId))
+const mapStateToProps = (state, { sectionId }) => {
+  console.log('FIELDS MSTP', getFieldBySectionId(state, sectionId))
   return {
-    fields: getFieldBySectionId(state, ownProps.sectionId),
-    sectionId: ownProps.sectionId,
+    fields: getFieldBySectionId(state, sectionId),
+    sectionId,
   };
 };
 
 const SectionFields = connect(
   mapStateToProps,
-  { onAddFieldClick: addField },
+  { onAddFieldClick: createField },
 )(Fields);
 
 export default SectionFields;

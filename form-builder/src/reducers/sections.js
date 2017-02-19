@@ -6,25 +6,20 @@ const byId = (state = {}, action) => {
 
   switch (action.type) {
     case 'EDIT_SECTION':
-    console.log('EDIT_SECTION', payload, action)
+    case 'ADD_SECTION':
       return {
         ...state,
         [payload.section.id]: section(state[payload.section.id], action),
       };
-    case 'ADD_SECTION':
-      return {
-        ...state,
-        [payload.sectionId]: section(state[payload.sectionId], action),
-      };
     case 'ADD_FIELD':
-      const { fieldId } = payload;
+      const { field } = payload;
       const fieldSection = state[payload.sectionId];
 
       return {
         ...state,
         [payload.sectionId] : {
           ...fieldSection,
-          fields : fieldSection.fields.concat(fieldId),
+          fields : fieldSection.fields.concat(field.id),
         }
       };
     default:
@@ -37,9 +32,8 @@ const allIds = (state = [], action) => {
 
   switch (action.type) {
     case 'EDIT_SECTION':
-      return [...state, payload.section.id];
     case 'ADD_SECTION':
-      return [...state, payload.sectionId];
+      return [...state, payload.section.id];
     default:
       return state;
   }

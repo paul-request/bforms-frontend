@@ -1,21 +1,41 @@
 import { v4 } from 'node-uuid';
 import { formSchema } from './schema';
 
-export const createForm = (formData) => {
-  const form = {
-    id: v4(),
-    ...formData,
-  };
-
-  return {
-    type: 'ADD_FORM',
-    payload: {
-      form,
-    },
-  };
+const defaultObj = {
+  id: v4(),
 };
 
-export const editForm = (formData) => {
+const getSectionAction = (type, section, formId) =>({
+  type,
+  payload: {
+    section,
+    formId,
+  },
+});
+
+const getFieldAction = (type, field, sectionId) =>({
+  type,
+  payload: {
+    field,
+    sectionId,
+  },
+});
+
+const getFormAction = (type, form) => ({
+  type,
+  payload: {
+    form,
+  },
+});
+
+export const createForm = (formData) => {
+  return getFormAction('ADD_FORM', {
+    id: v4(),
+    ...formData,
+  });
+};
+
+export const addForm = (formData) => {
   const mapObjWithId = (obj, id = v4()) => ({ ...obj, id });
   const mapFormWithIds = (form) => {
     if (form.sections) {
@@ -38,50 +58,22 @@ export const editForm = (formData) => {
   console.log('TEST FORM DATA', formData)
   const mappedformData = mapFormWithIds(formData);
 
-  return {
-    type: 'ADD_FORM',
-    payload: {
-      form: mappedformData,
-    },
-  };
+  return getFormAction('ADD_FORM', mappedformData);
 }
-export const editSection = ( section, formId ) => {
+export const addSection = ( formId, section = { ...defaultObj } ) => {
   console.log('ACTION: EDITSECTION', section, formId)
-  return {
-    type: 'EDIT_SECTION',
-    payload: {
-      formId,
-      section,
-    }
-  };
+  return getSectionAction('EDIT_SECTION', section, formId);
 }
 
-export const addSection = ( formId ) => {
-  return {
-    type: 'ADD_SECTION',
-    payload: {
-      formId,
-      sectionId: v4(),
-    }
-  };
+export const createSection = ( formId, section = { ...defaultObj } ) => {
+  console.log('addSEction', section, formId)
+  return getSectionAction('ADD_SECTION', section, formId);
 }
 
-export const editField = ( field, sectionId ) => {
-  return {
-    type : "EDIT_FIELD",
-    payload : {
-      sectionId,
-      field,
-    },
-  };
+export const addField = ( sectionId, field = { ...defaultObj } ) => {
+  return getFieldAction('EDIT_FIELD', field, sectionId);
 }
 
-export const addField = ( sectionId ) => {
-  return {
-    type : "ADD_FIELD",
-    payload : {
-      sectionId,
-      fieldId: v4(),
-    },
-  };
+export const createField = ( sectionId, field = { ...defaultObj } ) => {
+  return getFieldAction('ADD_FIELD', field, sectionId);
 }

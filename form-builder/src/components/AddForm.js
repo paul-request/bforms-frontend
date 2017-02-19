@@ -1,6 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
-import { createForm, editForm, editSection, editField } from '../actions';
+import { createForm, addForm, addSection, addField } from '../actions';
 import { browserHistory } from 'react-router';
 
 class AddForm extends Component {
@@ -57,29 +57,25 @@ class AddForm extends Component {
     // if isValid, else add error and display somehow. Look it up
     // Actually need to go through, chec k the structure and use correct JSON format here
     const data = JSON.parse(formData.value);
-    const action = editForm(data);
+    const action = addForm(data);
 
     this.props.dispatch(action);
-console.log('BEFORE ACTION', action)
 
     if (action.payload.form.sections) {
       action.payload.form.sections.forEach(section => {
-        console.log('SECTION:', section)
-        const editSectionAction = editSection(section, action.payload.form.id);
+        const editSectionAction = editSection(action.payload.form.id, section);
         this.props.dispatch(editSectionAction);
 
         if (section.fields) {
-          console.log('ADD FORM: SECTION>FIELDS', section.fields)
           section.fields.forEach(field => {
-            const editFieldAction = editField(field, editSectionAction.payload.section.id);
+            const editFieldAction = editField(editSectionAction.payload.section.id, field);
             this.props.dispatch(editFieldAction);
           });
         }
       });
     }
 
-
-    //this.submit(action);
+    browserHistory.push(`/form-builder/${action.payload.form.id}`);
   }
 
   render() {

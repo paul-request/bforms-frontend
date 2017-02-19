@@ -13,14 +13,14 @@ const byId = (state = {}, action) => {
       };
     case 'ADD_SECTION':
       console.log('ADD SECTION payload', state, payload)
-      const { sectionId, formId } = payload;
+      const { section, formId } = payload;
       const sectionForm = state[formId];
 
       return {
         ...state,
         [formId] : {
           ...sectionForm,
-          sections : sectionForm.sections.concat(sectionId),
+          sections : sectionForm.sections.concat(section.id),
         }
       };
     default:

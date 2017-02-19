@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import React from 'react';
 import { getSectionsByFormId } from '../reducers';
 import Section from './Section';
-import { addSection } from '../actions';
+import { createSection } from '../actions';
 
 const Sections = ({ formId, sections, onAddSectionClick }) => (
   <div>
@@ -28,7 +28,7 @@ const mapStateToProps = (state, { formId }) => {
 
 const FormSections = connect(
   mapStateToProps,
-  { onAddSectionClick: addSection }
+  { onAddSectionClick: createSection }
 )(Sections);
 
 export default FormSections;

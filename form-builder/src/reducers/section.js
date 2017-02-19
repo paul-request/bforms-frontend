@@ -20,7 +20,7 @@ const section = (state = initialState, action) => {
     case 'ADD_SECTION':
       return {
         ...state,
-        id: payload.sectionId,
+        id: payload.section.id,
       };
     default:
       return state;

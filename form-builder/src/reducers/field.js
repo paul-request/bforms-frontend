@@ -6,21 +6,14 @@ const initialState = {
 };
 
 const field = (state = initialState, action) => {
+  const { payload } = action;
+
   switch (action.type) {
     case 'EDIT_FIELD':
-      const id = action.payload.field.id;
-
-      return {
-        ...state,
-        id,
-      };
     case 'ADD_FIELD':
-      const { payload } = action;
-      const { fieldId } = payload;
-
       return {
         ...state,
-        id: fieldId,
+        id: payload.field.id,
       };
     default:
       return state;
