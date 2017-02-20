@@ -11,24 +11,25 @@ const formBuilder = combineReducers({
 
 export default formBuilder;
 
-export const getSectionsByFormId = (state, formId) => {
-  console.log('get sections by form id', state, formId)
-  const form = fromForms.getFormById(state.forms, formId);
+export const getSectionsByFormId = (state, id) => {
+  console.log('get sections by form id', state, id)
+  const form = fromForms.getFormById(state.forms, id);
 
   return fromSections.getSections(state.sections, form.sections);
 };
 
-export const getFieldBySectionId = (state, sectionId) => {
-  const section = fromSections.getSectionById(state.sections, sectionId);
+export const getFieldsBySectionId = (state, id) => {
+  const section = fromSections.getSectionById(state.sections, id);
+
+  console.log('getFieldsBySectionId', section)
 
   return fromFields.getFields(state.fields, section.fields);
 };
 
-export const getFormById = (state, formId) => {
-  console.log('GET FORM BY ID', formId)
-  return fromForms.getFormById(state.forms, formId);
-};
+export const getSectionById = (state, id) => fromSections.getSectionById(state.sections, id);
 
-export const getForms = (state) => {
-  return fromForms.getForms(state.forms);
-};
+export const getFormById = (state, id) => fromForms.getFormById(state.forms, id);
+
+export const getForms = (state) => fromForms.getForms(state.forms);
+
+export const getCurrentFormId = (state) => fromForms.getCurrentFormId(state.forms);

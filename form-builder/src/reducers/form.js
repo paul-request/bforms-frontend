@@ -6,6 +6,7 @@ const initialState = {
   sections: [],
 };
 
+// TODO: Do I need this, what is it doind that forms.js isn't????
 const form = (state = initialState, action) => {
   const { payload } = action;
 

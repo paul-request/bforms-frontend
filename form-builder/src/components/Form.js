@@ -9,7 +9,7 @@ const Form = ({ form }) => (
     <h1 className="heading-large">{form.formName}</h1>
     <p>{form.description}</p>
 
-    <Sections formId={form.id}/>
+    <Sections />
   </div>
 );
 

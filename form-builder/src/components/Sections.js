@@ -1,14 +1,14 @@
 import { connect } from 'react-redux';
 import React from 'react';
-import { getSectionsByFormId } from '../reducers';
+import { getSectionsByFormId, getCurrentFormId } from '../reducers';
 import Section from './Section';
 import { createSection } from '../actions';
 
-const Sections = ({ formId, sections, onAddSectionClick }) => (
+const Sections = ({ sections, formId, onAddSectionClick }) => (
   <div>
     {sections.map(section =>
       <Section key={section.id}
-               {...section} />
+               id={section.id} />
     )}
 
     <button className="button"
@@ -18,7 +18,8 @@ const Sections = ({ formId, sections, onAddSectionClick }) => (
   </div>
 );
 
-const mapStateToProps = (state, { formId }) => {
+const mapStateToProps = (state,) => {
+  const formId = getCurrentFormId(state);
   console.log('SECTIONS MSTP', formId)
   return {
     sections: getSectionsByFormId(state, formId),
@@ -26,9 +27,9 @@ const mapStateToProps = (state, { formId }) => {
   };
 };
 
-const FormSections = connect(
+const SectionsContainer = connect(
   mapStateToProps,
   { onAddSectionClick: createSection }
 )(Sections);
 
-export default FormSections;
+export default SectionsContainer;

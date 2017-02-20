@@ -1,10 +1,13 @@
 import { combineReducers } from 'redux';
 import section from './section';
+import { removeKeyFromObject, removeItemFromArray } from '../utils';
 
 const byId = (state = {}, action) => {
   const { payload } = action;
 
   switch (action.type) {
+    case 'REMOVE_SECTION':
+      return removeKeyFromObject(payload.section.id, state);
     case 'EDIT_SECTION':
     case 'ADD_SECTION':
       return {
@@ -31,6 +34,8 @@ const allIds = (state = [], action) => {
   const { payload } = action;
 
   switch (action.type) {
+    case 'REMOVE_SECTION':
+      return removeItemFromArray(payload.section.id, state);
     case 'EDIT_SECTION':
     case 'ADD_SECTION':
       return [...state, payload.section.id];
