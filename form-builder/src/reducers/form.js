@@ -1,3 +1,8 @@
+import {
+  ADD_FORM,
+  IMPORT_FORM,
+} from '../constants/actionTypes';
+
 const initialState = {
   formName: 'Form title',
   description: 'A description of your form',
@@ -9,15 +14,23 @@ const initialState = {
 // TODO: Do I need this, what is it doind that forms.js isn't????
 const form = (state = initialState, action) => {
   const { payload } = action;
+  const { formTypeId, formName, description } = payload.form;
 
   switch (action.type) {
-    case 'ADD_FORM':
-      const { id, formName, description, sections = [] } = payload.form;
+    case ADD_FORM:
+      return {
+        ...state,
+        formTypeId,
+        formName,
+        description,
+      };
+    case IMPORT_FORM:
+      const { sections = [] } = payload.form;
       const sectionIds = sections.map(section => section.id);
 
       return {
         ...state,
-        id,
+        formTypeId,
         formName,
         description,
         sections: sectionIds,

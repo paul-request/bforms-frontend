@@ -1,18 +1,25 @@
 import { combineReducers } from 'redux';
 import form from './form';
 import { removeItemFromArray } from '../utils';
+import {
+  ADD_FORM,
+  IMPORT_FORM,
+  ADD_SECTION,
+  REMOVE_SECTION,
+} from '../constants/actionTypes';
 
 const byId = (state = {}, action) => {
   const { payload } = action;
 
   switch (action.type) {
-    case 'ADD_FORM':
+    case ADD_FORM:
+    case IMPORT_FORM:
       console.log('PAUL TEST', state, action)
       return {
         ...state,
-        [payload.form.id]: form(state[action.id], action),
+        [payload.form.formTypeId]: form(state[action.id], action),
       };
-    case 'ADD_SECTION':
+    case ADD_SECTION:
       console.log('ADD SECTION payload', state, payload)
       const sectionForm = state[payload.formId];
 
@@ -23,7 +30,7 @@ const byId = (state = {}, action) => {
           sections: sectionForm.sections.concat(payload.section.id),
         }
       };
-    case 'REMOVE_SECTION':
+    case REMOVE_SECTION:
       const parentForm = state[payload.formId];
 
       return {
@@ -42,8 +49,9 @@ const allIds = (state = [], action) => {
   const { payload } = action;
 
   switch (action.type) {
-    case 'ADD_FORM':
-      return [...state, payload.form.id];
+    case ADD_FORM:
+    case IMPORT_FORM:
+      return [...state, payload.form.formTypeId];
     default:
       return state;
   }
@@ -53,8 +61,9 @@ const current = (state = {}, action) => {
   const { payload } = action;
 
   switch (action.type) {
-    case 'ADD_FORM':
-      return payload.form.id;
+    case ADD_FORM:
+    case IMPORT_FORM:
+      return payload.form.formTypeId;
     default:
       return state;
   }
@@ -68,9 +77,9 @@ const forms = combineReducers({
 
 export default forms;
 
-export const getForms = (state) => {
-  return state.allIds.map(id => state.byId[id]);
-};
+// Selectors
+
+export const getForms = (state) => state.allIds.map(id => state.byId[id]);
 
 export const getFormById = (state, id) => state.byId[id];
 

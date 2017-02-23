@@ -2,33 +2,27 @@ import { connect } from 'react-redux';
 import React from 'react';
 import { getFieldsBySectionId } from '../reducers';
 import Field from './Field';
-import { createField } from '../actions';
 
-const Fields = ({ sectionId, fields, onAddFieldClick }) => (
+const Fields = ({ sectionId, fields }) => (
   <div>
     {fields.map(field =>
       <Field key={field.id}
-             {...field} />
+             id={field.id}
+             sectionId={sectionId} />
     )}
-
-    <button className="button"
-            onClick={() => onAddFieldClick(sectionId)}>
-      Add field
-    </button>
   </div>
 );
 
 const mapStateToProps = (state, { sectionId }) => {
-  console.log('FIELDS MSTP', sectionId)
+  console.log('FIELDS MSTP: fields', getFieldsBySectionId(state, sectionId))
   return {
     fields: getFieldsBySectionId(state, sectionId),
     sectionId,
   };
 };
 
-const SectionFields = connect(
+const FieldsContainer = connect(
   mapStateToProps,
-  { onAddFieldClick: createField },
 )(Fields);
 
-export default SectionFields;
+export default FieldsContainer;

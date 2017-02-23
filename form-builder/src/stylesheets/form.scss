@@ -1,0 +1,109 @@
+@import 'icon';
+
+.form-builder__actions {
+  padding: 30px 0;
+}
+
+.form-builder__component {
+  position: relative;
+
+  .form-builder__component__highlight {
+    position: absolute;
+    left: -15px;
+    right: -15px;
+    top: -15px;
+    bottom: -15px;
+    background: rgba(201, 232, 229, 0.9);
+    opacity: 0;
+    transition: opacity 0.25s ease-in-out;
+    padding: 15px;
+    border: 2px solid transparent;
+    z-index: 50;
+  }
+
+  .form-builder__component__actions {
+    position: absolute;
+    top: -2px;
+    left: 0;
+    width: 42px;
+    visibility: hidden;
+
+    .button {
+      background: #28A197;
+      color: #fff;
+      border: 1px solid #28A197;
+      border-radius: 3px;
+      float: none;
+      display: block;
+      margin: 0 0 3px;
+      box-shadow: none;
+    }
+
+    .button--danger {
+      background: #B10E1E;
+      border: 1px solid #B10E1E;
+    }
+
+    .button--icon {
+      width: 32px;
+      height: 32px;
+      padding: 5px;
+
+      .icon {
+        fill: #fff;
+      }
+
+      .button--icon__text {
+        position : absolute;
+        left: -9999em;
+        height: 0;
+        width: 0;
+      }
+    }
+  }
+
+  .form-group, .section {
+    z-index: 1000;
+    position: relative;
+
+    .form-control {
+      background: #fff;
+    }
+  }
+
+  &:after {
+    content: '';
+    display: block;
+    clear: both;
+  }
+}
+
+.form-builder__component--hover {
+  & > .form-builder__component__highlight {
+    opacity: 1;
+    border-color: #28A197;
+
+    .form-builder__component__actions {
+      top: -2px;
+      left: -42px;
+      visibility: visible;
+    }
+  }
+}
+
+.editable-field__input {
+  margin: 0;
+  padding: 0;
+  width: 50%;
+  position: relative;
+  top: -1px;
+  left: -1px;
+}
+
+.form-builder__output {
+  border: 1px solid #000;
+  padding: 30px;
+  font-family: monospace;
+  white-space: pre-wrap;
+  font-size: 12px;
+}

@@ -1,11 +1,13 @@
+const path = require('path');
+
 module.exports = {
   entry: [
     './src/index.js'
   ],
   output: {
-    path: __dirname,
-    publicPath: '/',
-    filename: 'bundle.js'
+    path: path.join(__dirname, 'dist'),
+    filename: 'bundle.js',
+    publicPath: '/static/'
   },
   module: {
     loaders: [{
@@ -13,11 +15,17 @@ module.exports = {
       loader: 'babel',
       query: {
         presets: ['react', 'es2015', 'stage-1']
-      }
+      },
+      include: __dirname
+    },
+    {
+      exclude: /node_modules/,
+      test: /\.scss$/,
+      loaders: [
+        'style', 'css', 'autoprefixer-loader?browsers=last 2 versions', 'sass'
+      ],
+      include: __dirname
     }]
-  },
-  resolve: {
-    extensions: ['', '.js', '.jsx']
   },
   devServer: {
     historyApiFallback: true,

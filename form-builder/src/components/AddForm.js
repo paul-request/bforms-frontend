@@ -1,7 +1,8 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
-import { createForm, addForm, addSection, addField } from '../actions';
+import { createForm, importForm, importSection, importField } from '../actions';
 import { browserHistory } from 'react-router';
+import '../stylesheets/index.scss';
 
 class AddForm extends Component {
   constructor() {
@@ -24,7 +25,7 @@ class AddForm extends Component {
     }));
   }
 
-  handleNewSubmit = (e) => {
+  handleCreate = (e) => {
     e.preventDefault();
 
     const { title, description } = this.state;
@@ -39,10 +40,10 @@ class AddForm extends Component {
     const action = createForm(data);
 
     this.props.dispatch(action);
-    browserHistory.push(`/form-builder/${action.payload.form.id}`);
+    browserHistory.push(`/form-builder/${action.payload.form.formTypeId}`);
   }
 
-  handleExistingSubmit = (e) => {
+  handleImport = (e) => {
     e.preventDefault();
 
     const { formData } = this.state;
@@ -57,32 +58,32 @@ class AddForm extends Component {
     // if isValid, else add error and display somehow. Look it up
     // Actually need to go through, chec k the structure and use correct JSON format here
     const data = JSON.parse(formData.value);
-    const action = addForm(data);
+    const action = importForm(data);
 
     this.props.dispatch(action);
 
     if (action.payload.form.sections) {
       action.payload.form.sections.forEach(section => {
-        const editSectionAction = editSection(action.payload.form.id, section);
-        this.props.dispatch(editSectionAction);
+        const importSectionAction = importSection(action.payload.form.formTypeId, section);
+        this.props.dispatch(importSectionAction);
 
         if (section.fields) {
           section.fields.forEach(field => {
-            const editFieldAction = editField(editSectionAction.payload.section.id, field);
-            this.props.dispatch(editFieldAction);
+            const importFieldAction = importField(importSectionAction.payload.section.id, field);
+            this.props.dispatch(importFieldAction);
           });
         }
       });
     }
 
-    browserHistory.push(`/form-builder/${action.payload.form.id}`);
+    browserHistory.push(`/form-builder/${action.payload.form.formTypeId}`);
   }
 
   render() {
     return (
       <div>
         <div className={`${this.state.startFromScratch ? '' : 'js-hidden'}`}>
-          <form onSubmit={(e) => this.handleNewSubmit(e)}>
+          <form onSubmit={(e) => this.handleCreate(e)}>
             <div className="section">
               <h2 className="heading-small">Create a form from scratch</h2>
 
@@ -100,15 +101,15 @@ class AddForm extends Component {
                 <button type="submit" className="button">Create form</button>
               </div>
 
-              <p><a href="#" onClick={this.toggleForm}>Or edit an existing form</a></p>
+              <p><a href="#" onClick={this.toggleForm}>Or import an existing form</a></p>
             </div>
           </form>
         </div>
 
         <div className={`${this.state.startFromScratch ? 'js-hidden' : ''}`}>
-          <form onSubmit={(e) => this.handleExistingSubmit(e)}>
+          <form onSubmit={(e) => this.handleImport(e)}>
             <div className="section">
-              <h2 className="heading-small">Edit an existing form</h2>
+              <h2 className="heading-small">Import an existing form</h2>
 
               <div className="form-group">
                 <textarea id="form-data"

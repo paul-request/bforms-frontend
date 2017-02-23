@@ -9,10 +9,11 @@ const ExistingForms = ({ forms }) => {
       <div className="section">
         <h2 className="heading-small">Existing forms</h2>
 
-        <ul>
+        <ul className="slat-container">
         {forms.map(form =>
-          <FormLink key={form.id}
-                    formId={form.id} />
+          <li className="slat" key={form.formTypeId}>
+            <FormLink formId={form.formTypeId} />
+          </li>
         )}
         </ul>
       </div>

@@ -1,7 +1,18 @@
 import { v4 } from 'node-uuid';
-import { formSchema } from './schema';
+import {
+  ADD_FORM,
+  IMPORT_FORM,
+  ADD_SECTION,
+  IMPORT_SECTION,
+  REMOVE_SECTION,
+  UPDATE_SECTION,
+  ADD_FIELD,
+  IMPORT_FIELD,
+  REMOVE_FIELD,
+  UPDATE_FIELD,
+} from '../constants/actionTypes';
 
-const defaultObj = () => ({
+const getDefaultObj = () => ({
   id: v4(),
 });
 
@@ -29,13 +40,13 @@ const getFormAction = (type, form) => ({
 });
 
 export const createForm = (formData) => {
-  return getFormAction('ADD_FORM', {
-    id: v4(),
+  return getFormAction(ADD_FORM, {
+    formTypeId: v4(),
     ...formData,
   });
 };
 
-export const addForm = (formData) => {
+export const importForm = (formData) => {
   const mapObjWithId = (obj, id = v4()) => ({ ...obj, id });
   const mapFormWithIds = (form) => {
     if (form.sections) {
@@ -58,29 +69,50 @@ export const addForm = (formData) => {
   console.log('TEST FORM DATA', formData)
   const mappedformData = mapFormWithIds(formData);
 
-  return getFormAction('ADD_FORM', mappedformData);
+  console.log('MAPPE FORM DATA !!!!!!!!!!!!', mappedformData)
+
+  return getFormAction(IMPORT_FORM, mappedformData);
 };
 
-export const addSection = (formId, section = defaultObj()) => {
+export const importSection = (formId, section = getDefaultObj()) => {
   console.log('ACTION: EDITSECTION', section, formId)
-  return getSectionAction('EDIT_SECTION', section, formId);
+  return getSectionAction(IMPORT_SECTION, section, formId);
 };
 
-export const createSection = (formId, section = defaultObj()) => {
+export const createSection = (formId, section = getDefaultObj()) => {
   console.log('addSEction', section, formId)
-  return getSectionAction('ADD_SECTION', section, formId);
+  return getSectionAction(ADD_SECTION, section, formId);
 };
 
 export const removeSection = (formId, section) => {
   console.log('removeSection', section, formId)
-  return getSectionAction('REMOVE_SECTION', section, formId);
+  return getSectionAction(REMOVE_SECTION, section, formId);
 };
 
-export const addField = ( sectionId, field = defaultObj() ) => {
-  return getFieldAction('EDIT_FIELD', field, sectionId);
+export const updateSection = (formId, section, newProps = {}) => {
+  console.log('updateSection', section, formId, newProps)
+  const updatedSection = Object.assign({}, section, newProps);
+
+  return getSectionAction(UPDATE_SECTION, updatedSection, formId);
 };
 
-export const createField = ( sectionId, field = defaultObj() ) => {
+export const importField = (sectionId, field = getDefaultObj()) => {
+  return getFieldAction(IMPORT_FIELD, field, sectionId);
+};
+
+export const createField = (sectionId, field = getDefaultObj()) => {
   console.log('CTREATE FIELD ACTION', field, sectionId)
-  return getFieldAction('ADD_FIELD', field, sectionId);
+  return getFieldAction(ADD_FIELD, field, sectionId);
+};
+
+export const removeField = (sectionId, field) => {
+  console.log('removeField', field, sectionId)
+  return getFieldAction(REMOVE_FIELD, field, sectionId);
+};
+
+export const updateField = (sectionId, field, newProps) => {
+  console.log('updateField ACTION', sectionId, field, newProps)
+  const updatedField = Object.assign({}, field, newProps);
+
+  return getFieldAction(UPDATE_FIELD, updatedField, sectionId);
 };

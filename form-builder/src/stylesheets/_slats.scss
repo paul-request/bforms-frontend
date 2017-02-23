@@ -1,0 +1,31 @@
+.slat-container {
+  border: 1px solid #DEE0E2;
+  background: #fff;
+  padding: 0;
+  margin: 0;
+
+  .slat {
+    overflow: hidden;
+    border-top: 1px solid #DEE0E2;
+    padding: 15px;
+
+    &:first-child {
+      border: none;
+    }
+
+    .slat__title {
+      font-weight: 700;
+      margin: 0;
+      padding: 0;
+    }
+
+    .slat__desc {
+      margin: 5px 0 0;
+      padding: 0;
+    }
+
+    .slat__actions {
+      text-align: right;
+    }
+  }
+}

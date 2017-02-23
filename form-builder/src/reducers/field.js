@@ -1,3 +1,9 @@
+import {
+  ADD_FIELD,
+  IMPORT_FIELD,
+  UPDATE_FIELD
+} from '../constants/actionTypes';
+
 const initialState = {
   type: 'text',
   label: 'Input label',
@@ -7,13 +13,17 @@ const initialState = {
 
 const field = (state = initialState, action) => {
   const { payload } = action;
+  const { field } = payload;
+
+  console.log('FIELD REDUCER: FIELD', state, action)
 
   switch (action.type) {
-    case 'EDIT_FIELD':
-    case 'ADD_FIELD':
+    case IMPORT_FIELD:
+    case ADD_FIELD:
+    case UPDATE_FIELD:
       return {
         ...state,
-        id: payload.field.id,
+        ...field,
       };
     default:
       return state;
