@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import React from 'react';
+import React, { PropTypes } from 'react';
 import FormLink from './FormLink';
 import { getForms } from '../reducers';
 
@@ -22,6 +22,10 @@ const ExistingForms = ({ forms }) => {
 
   return null;
 }
+
+ExistingForms.propTypes = {
+  forms: PropTypes.func,
+};
 
 const mapStateToProps = (state) => {
   return {

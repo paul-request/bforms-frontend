@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { getFieldsBySectionId } from '../reducers';
 import Field from './Field';
 

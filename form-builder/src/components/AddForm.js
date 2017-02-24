@@ -62,6 +62,7 @@ class AddForm extends Component {
 
     this.props.dispatch(action);
 
+    // TODO: Is there a better place to put this, perhaps in reducer index?
     if (action.payload.form.sections) {
       action.payload.form.sections.forEach(section => {
         const importSectionAction = importSection(action.payload.form.formTypeId, section);

@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import EditableText from './EditableText';
 import FormComponent from './FormComponent';
 import { getFieldById } from '../reducers';
@@ -43,6 +43,12 @@ class Field extends FormComponent {
       </div>
     );
   }
+};
+
+Field.propTypes = {
+  sectionId: PropTypes.string.isRequired,
+  field: PropTypes.object.isRequired,
+  onRemoveFieldClick: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state, { sectionId, id }) => {

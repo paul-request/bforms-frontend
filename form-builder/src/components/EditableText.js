@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { KEYS } from '../constants';
 
 class EditableText extends Component {
@@ -37,8 +37,6 @@ class EditableText extends Component {
   }
 
   render() {
-    const { inputId, className } = this.props;
-
     return (
       <span className="editable-field" onClick={this.handleClick}>
         {
@@ -56,5 +54,10 @@ class EditableText extends Component {
     )
   }
 }
+
+EditableText.propTypes = {
+  value: PropTypes.string.isRequired,
+  propertyKey: PropTypes.string.isRequired,
+};
 
 export default EditableText;
