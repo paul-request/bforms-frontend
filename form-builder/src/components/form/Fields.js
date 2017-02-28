@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import React, { PropTypes } from 'react';
-import { getFieldsBySectionId } from '../reducers';
+import { getFieldsBySectionId } from '../../reducers';
 import Field from './Field';
 
 const Fields = ({ sectionId, fields }) => (

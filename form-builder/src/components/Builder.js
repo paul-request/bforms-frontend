@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import React, { Component } from 'react';
-import FormFrame from './FormFrame';
+import FormFrame from './form/FormFrame';
 import Output from './Output';
 import { withRouter } from 'react-router';
 import { loadForm } from '../actions';

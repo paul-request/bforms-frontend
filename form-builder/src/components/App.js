@@ -1,6 +1,6 @@
 import React from 'react';
 import AddForm from './AddForm';
-import Form from './Form';
+import Form from './form/Form';
 import ExistingForms from './ExistingForms';
 import '../stylesheets/index.scss';
 

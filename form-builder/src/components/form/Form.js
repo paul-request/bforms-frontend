@@ -1,8 +1,8 @@
 import { connect } from 'react-redux';
 import React, { Component } from 'react';
 import Sections from './Sections';
-import { getFormById, getCurrentFormId } from '../reducers';
-import { createSection } from '../actions';
+import { getFormById, getCurrentFormId } from '../../reducers';
+import { createSection } from '../../actions';
 
 class Form extends Component {
   render() {

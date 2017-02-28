@@ -5,24 +5,14 @@ import FormHeader from './FormHeader';
 import Form from './Form';
 import FormFooter from './FormFooter';
 import { findDOMNode } from 'react-dom';
-import { getFormById, getCurrentFormId } from '../reducers';
+import { getFormById, getCurrentFormId } from '../../reducers';
 
 class FormFrame extends Component {
-  componentDidMount = () => {
-    const iframe = findDOMNode(this);
-
-    // This is a hack, but seems to do thee trick, as well as wrapping all the
-    // child components in one component!?
-    // setTimeout(() => {
-    //   iframe.height = `${iframe.contentWindow.document.body.scrollHeight}px`;
-    // }, 100);
-  }
-
   render() {
     const styles = {
       border: 'none',
       width: '100%',
-      heioght: '100%',
+      height: '100%',
     };
     const initialContent = `
       <!DOCTYPE html>

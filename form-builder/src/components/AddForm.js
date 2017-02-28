@@ -16,16 +16,16 @@ class AddForm extends Component {
     };
   }
 
-  toggleForm = (e) => {
-    e.preventDefault();
+  toggleForm = (event) => {
+    event.preventDefault();
 
     this.setState(prevState => ({
       startFromScratch: !prevState.startFromScratch,
     }));
   }
 
-  handleCreate = (e) => {
-    e.preventDefault();
+  handleCreate = (event) => {
+    event.preventDefault();
 
     const { title, description } = this.state;
     const hasDetails = title.value.trim() || description.value.trim();
@@ -42,8 +42,8 @@ class AddForm extends Component {
     browserHistory.push(`/form-builder/${action.payload.form.formTypeId}`);
   }
 
-  handleImport = (e) => {
-    e.preventDefault();
+  handleImport = (event) => {
+    event.preventDefault();
 
     const { formData } = this.state;
     const hasData = formData.value;
@@ -83,7 +83,7 @@ class AddForm extends Component {
     return (
       <div className="well">
         <div className={`${this.state.startFromScratch ? '' : 'hidden'}`}>
-          <form onSubmit={(e) => this.handleCreate(e)}>
+          <form onSubmit={this.handleCreate}>
             <h2 className="h3">Create a form from scratch</h2>
 
             <div className="form-group">
@@ -105,7 +105,7 @@ class AddForm extends Component {
         </div>
 
         <div className={`${this.state.startFromScratch ? 'hidden' : ''}`}>
-          <form onSubmit={(e) => this.handleImport(e)}>
+          <form onSubmit={this.handleImport}>
             <h2 className="h3">Import an existing form</h2>
 
             <div className="form-group">

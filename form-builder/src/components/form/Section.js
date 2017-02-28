@@ -1,10 +1,10 @@
 import { connect } from 'react-redux';
 import React, { Component } from 'react';
 import Fields from './Fields';
-import EditableText from './EditableText';
+import EditableText from '../utils/EditableText';
 import FormComponent from './FormComponent';
-import { removeSection, createField, updateSection } from '../actions';
-import { getSectionById, getCurrentFormId } from '../reducers';
+import { removeSection, createField, updateSection } from '../../actions';
+import { getSectionById, getCurrentFormId } from '../../reducers';
 
 class Section extends FormComponent {
   onSaveChanges = (newProps) => {

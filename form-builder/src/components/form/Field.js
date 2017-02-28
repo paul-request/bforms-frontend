@@ -1,9 +1,9 @@
 import { connect } from 'react-redux';
 import React, { Component, PropTypes } from 'react';
-import EditableText from './EditableText';
+import EditableText from '../utils/EditableText';
 import FormComponent from './FormComponent';
-import { getFieldById } from '../reducers';
-import { removeField, updateField } from '../actions';
+import { getFieldById } from '../../reducers';
+import { removeField, updateField } from '../../actions';
 
 class Field extends FormComponent {
   onSaveChanges = (newProps) => {

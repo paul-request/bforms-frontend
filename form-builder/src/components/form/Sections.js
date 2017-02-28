@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import React from 'react';
 import { withRouter } from 'react-router';
-import { getSectionsByFormId, getCurrentFormId } from '../reducers';
+import { getSectionsByFormId, getCurrentFormId } from '../../reducers';
 import Section from './Section';
 
 const Sections = ({ sections }) => (

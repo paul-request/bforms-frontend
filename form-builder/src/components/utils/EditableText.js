@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { KEYS } from '../constants';
+import { KEYS } from '../../constants';
 
 class EditableText extends Component {
   constructor(props) {
@@ -19,12 +19,11 @@ class EditableText extends Component {
     this.change = this.change.bind(this);
   }
 
-  change(e) {
-    this.setState({ value: e.currentTarget.value });
+  change = (event) => {
+    this.setState({ value: event.currentTarget.value });
   }
 
-  handleBlur = (e) => {
-    console.log('BLUR', e.currentTarget.value)
+  handleBlur = (event) => {
     this.setState({ isEditing: false });
 
     this.props.onSave({
@@ -32,7 +31,7 @@ class EditableText extends Component {
     });
   }
 
-  handleClick = (e) => {
+  handleClick = () => {
     this.setState({ isEditing: true });
   }
 

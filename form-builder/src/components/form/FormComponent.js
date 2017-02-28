@@ -12,14 +12,14 @@ class FormComponent extends Component {
     this.mouseOut = this.mouseOut.bind(this);
   }
 
-  mouseOver(e) {
-    e.stopPropagation();
+  mouseOver(event) {
+    event.stopPropagation();
 
     this.setState({ isHovering: true });
   }
 
-  mouseOut(e) {
-    e.stopPropagation();
+  mouseOut(event) {
+    event.stopPropagation();
 
     this.setState({ isHovering: false });
   }
