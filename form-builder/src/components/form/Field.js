@@ -35,7 +35,9 @@ class Field extends FormComponent {
 
         <div className="form-group">
           <label htmlFor={field.id} className="form-label">
-            <EditableText value={field.label} propertyKey={'label'} onSave={this.onSaveChanges} />
+            <EditableText value={field.label}
+                          propertyKey={'label'}
+                          onSave={this.onSaveChanges} />
           </label>
 
           <input type="text" id="{field.id}" name="{field.id}" className="form-control" />

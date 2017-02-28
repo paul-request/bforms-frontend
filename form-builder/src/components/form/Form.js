@@ -1,10 +1,17 @@
 import { connect } from 'react-redux';
 import React, { Component } from 'react';
+import EditableText from '../utils/EditableText';
 import Sections from './Sections';
 import { getFormById, getCurrentFormId } from '../../reducers';
-import { createSection } from '../../actions';
+import { createSection, updateForm } from '../../actions';
 
 class Form extends Component {
+  onSaveChanges = (newProps) => {
+    const { form, onSaveChanges } = this.props;
+
+    onSaveChanges(form, newProps);
+  }
+
   render() {
     const { form, onAddSectionClick, onShowJSONClick } = this.props;
 
@@ -12,7 +19,11 @@ class Form extends Component {
       <main id="content" role="main">
         <div className="grid-row">
           <div className="column-full">
-            <p>{form.description}</p>
+            <p>
+              <EditableText value={form.description}
+                            propertyKey={'description'}
+                            onSave={this.onSaveChanges} />
+            </p>
 
             <Sections />
 
@@ -37,5 +48,8 @@ const mapStateToProps = (state) => {
 
 export default connect(
   mapStateToProps,
-  { onAddSectionClick: createSection },
+  {
+    onAddSectionClick: createSection,
+    onSaveChanges: updateForm,
+  },
 )(Form);

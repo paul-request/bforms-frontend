@@ -5,6 +5,7 @@ import {
   ADD_FORM,
   IMPORT_FORM,
   LOAD_FORM,
+  UPDATE_FORM,
   ADD_SECTION,
   REMOVE_SECTION,
 } from '../constants/actionTypes';
@@ -15,7 +16,8 @@ const byId = (state = {}, action) => {
   switch (action.type) {
     case ADD_FORM:
     case IMPORT_FORM:
-      console.log('PAUL TEST', state, action)
+    case UPDATE_FORM:
+      console.log('ADD, IMPORT, UPDATE FORM', state, action)
       return {
         ...state,
         [payload.form.formTypeId]: form(state[action.id], action),

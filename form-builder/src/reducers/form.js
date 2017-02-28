@@ -1,6 +1,7 @@
 import {
   ADD_FORM,
   IMPORT_FORM,
+  UPDATE_FORM,
 } from '../constants/actionTypes';
 
 const initialState = {
@@ -25,6 +26,7 @@ const form = (state = initialState, action) => {
         description,
       };
     case IMPORT_FORM:
+    case UPDATE_FORM:
       const { sections = [] } = payload.form;
       const sectionIds = sections.map(section => section.id);
 

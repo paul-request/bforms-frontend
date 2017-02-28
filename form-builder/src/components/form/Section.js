@@ -50,7 +50,9 @@ class Section extends FormComponent {
 
         <div className="section">
           <h2 className="heading-medium">
-            <EditableText value={section.title} propertyKey={'title'} onSave={this.onSaveChanges} />
+            <EditableText value={section.title}
+                          propertyKey={'title'}
+                          onSave={this.onSaveChanges} />
           </h2>
 
           {section.description &&

@@ -29,6 +29,22 @@ class Builder extends Component {
   }
 
   render() {
+    let toggleBtnValue;
+
+    if (this.state.output) {
+      toggleBtnValue = (
+        <span>
+          <i className="glyphicon glyphicon-pencil"></i> Edit form
+        </span>
+      );
+    } else {
+      toggleBtnValue = (
+        <span>
+          <i className="glyphicon glyphicon-file"></i> View JSON output
+        </span>
+      );
+    }
+
     return (
       <div className="form-builder">
         <div className="form-builder__actions">
@@ -38,9 +54,9 @@ class Builder extends Component {
             </div>
 
             <div className="panel-body">
-              <button className="btn btn-default"
+              <button className="btn btn-default btn-block"
                       onClick={() => this.toggleOutput()}>
-                Toggle JSON output
+                {toggleBtnValue}
               </button>
             </div>
           </div>

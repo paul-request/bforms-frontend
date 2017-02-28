@@ -3,6 +3,7 @@ import {
   ADD_FORM,
   IMPORT_FORM,
   LOAD_FORM,
+  UPDATE_FORM,
   ADD_SECTION,
   IMPORT_SECTION,
   REMOVE_SECTION,
@@ -80,6 +81,13 @@ export const loadForm = (formTypeId) => {
     formTypeId
   });
 }
+
+export const updateForm = (form, newProps) => {
+  return getFormAction(UPDATE_FORM, {
+    ...form,
+    ...newProps,
+  });
+};
 
 export const importSection = (formId, section = getDefaultObj()) => {
   console.log('ACTION: EDITSECTION', section, formId)
