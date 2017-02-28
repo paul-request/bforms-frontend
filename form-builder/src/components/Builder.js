@@ -19,9 +19,9 @@ class Builder extends Component {
     const { formId, currentFormId } = this.props;
 
     // Don't dispatch an action if the form is already loaded
-    if (formId === currentFormId) return;
-
-    this.props.onComponentDidMount(formId);
+    if (formId !== currentFormId) {
+      this.props.onComponentDidMount(formId);
+    }
   }
 
   toggleOutput = () => {

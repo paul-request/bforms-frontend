@@ -1,6 +1,10 @@
 @import 'list-group';
 @import 'form-builder';
 
+html, body, #app-root, .form-builder, .form-builder__view, iframe {
+  height: 100%;
+}
+
 svg {
   position: absolute;
   width: 0;
