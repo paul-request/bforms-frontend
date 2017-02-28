@@ -2,6 +2,7 @@ import { v4 } from 'node-uuid';
 import {
   ADD_FORM,
   IMPORT_FORM,
+  LOAD_FORM,
   ADD_SECTION,
   IMPORT_SECTION,
   REMOVE_SECTION,
@@ -73,6 +74,12 @@ export const importForm = (formData) => {
 
   return getFormAction(IMPORT_FORM, mappedformData);
 };
+
+export const loadForm = (formTypeId) => {
+  return getFormAction(LOAD_FORM, {
+    formTypeId
+  });
+}
 
 export const importSection = (formId, section = getDefaultObj()) => {
   console.log('ACTION: EDITSECTION', section, formId)

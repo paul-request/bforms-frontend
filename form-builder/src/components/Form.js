@@ -1,35 +1,41 @@
 import { connect } from 'react-redux';
 import React, { Component } from 'react';
 import Sections from './Sections';
-import { withRouter } from 'react-router';
-import { getFormById } from '../reducers';
+import { getFormById, getCurrentFormId } from '../reducers';
 import { createSection } from '../actions';
-import '../stylesheets/form.scss';
 
-const Form = ({ form, onAddSectionClick, onShowJSONClick }) => (
-  <div>
-    <h1 className="heading-large">{form.formName}</h1>
-    <p>{form.description}</p>
+class Form extends Component {
+  render() {
+    const { form, onAddSectionClick, onShowJSONClick } = this.props;
 
-    <Sections />
+    return (
+      <main id="content" role="main">
+        <div className="grid-row">
+          <div className="column-full">
+            <p>{form.description}</p>
 
-    <button className="button"
-            onClick={() => onAddSectionClick(form.formTypeId)}>
-      Add section
-    </button>
-  </div>
-);
+            <Sections />
 
-const mapStateToProps = (state, { params }) => {
-  console.log('FORM MSTP', params.formId)
+            <button className="button"
+                    onClick={() => onAddSectionClick(form.formTypeId)}>
+              Add section
+            </button>
+          </div>
+        </div>
+      </main>
+    );
+  }
+}
+
+const mapStateToProps = (state) => {
+  const formId = getCurrentFormId(state);
+
   return {
-    form: getFormById(state, params.formId),
+    form: getFormById(state, formId),
   };
 };
 
-export default withRouter(
-  connect(
-    mapStateToProps,
-    { onAddSectionClick: createSection },
-  )(Form)
-);
+export default connect(
+  mapStateToProps,
+  { onAddSectionClick: createSection },
+)(Form);

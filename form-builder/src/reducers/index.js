@@ -24,6 +24,8 @@ export const getCurrentFormId = (state) => fromForms.getCurrentFormId(state.form
 export const getSectionsByFormId = (state, id) => {
   const form = getFormById(state, id);
 
+  console.log('GET SECTIONS BY FORM ID', state, id)
+
   return fromSections.getSections(state.sections, form.sections);
 };
 
@@ -38,6 +40,7 @@ export const getFieldsBySectionId = (state, id) => {
 export const getDenormalisedForm = (state, formId) => {
   // TODO: formTypeId - need to generate this probably and use instead of id?
   const form = getFormById(state, formId);
+  console.log('GET DENIRMALISED FORM', form)
   const formSections = getSectionsByFormId(state, formId);
   const sections = formSections.map(section => {
     const { id, ...outputSection } = section;

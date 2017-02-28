@@ -2,7 +2,6 @@ import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { createForm, importForm, importSection, importField } from '../actions';
 import { browserHistory } from 'react-router';
-import '../stylesheets/index.scss';
 
 class AddForm extends Component {
   constructor() {
@@ -82,50 +81,47 @@ class AddForm extends Component {
 
   render() {
     return (
-      <div>
-        <div className={`${this.state.startFromScratch ? '' : 'js-hidden'}`}>
+      <div className="well">
+        <div className={`${this.state.startFromScratch ? '' : 'hidden'}`}>
           <form onSubmit={(e) => this.handleCreate(e)}>
-            <div className="section">
-              <h2 className="heading-small">Create a form from scratch</h2>
+            <h2 className="h3">Create a form from scratch</h2>
 
-              <div className="form-group">
-                <label htmlFor="form-title" className="formControl">Title</label>
-                <input id="form-title" className="form-control" ref={node => { this.state.title = node; }} />
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="form-desc" className="formControl">Description</label>
-                <input id="form-desc" className="form-control" ref={node => { this.state.description = node; }} />
-              </div>
-
-              <div className="form-group">
-                <button type="submit" className="button">Create form</button>
-              </div>
-
-              <p><a href="#" onClick={this.toggleForm}>Or import an existing form</a></p>
+            <div className="form-group">
+              <label htmlFor="form-title" className="form-label">Title</label>
+              <input id="form-title" className="form-control" ref={node => { this.state.title = node; }} />
             </div>
+
+            <div className="form-group">
+              <label htmlFor="form-desc" className="form-label">Description</label>
+              <input id="form-desc" className="form-control" ref={node => { this.state.description = node; }} />
+            </div>
+
+            <div className="form-group">
+              <button type="submit" className="btn btn-success">Create form</button>
+            </div>
+
+            <p><a href="#" onClick={this.toggleForm}>Or import an existing form</a></p>
           </form>
         </div>
 
-        <div className={`${this.state.startFromScratch ? 'js-hidden' : ''}`}>
+        <div className={`${this.state.startFromScratch ? 'hidden' : ''}`}>
           <form onSubmit={(e) => this.handleImport(e)}>
-            <div className="section">
-              <h2 className="heading-small">Import an existing form</h2>
+            <h2 className="h3">Import an existing form</h2>
 
-              <div className="form-group">
-                <textarea id="form-data"
-                          name="form-data"
-                          className="form-control"
-                          ref={node => { this.state.formData = node; }}>
-                </textarea>
-              </div>
-
-              <div className="form-group">
-                <button type="submit" className="button">Create form</button>
-              </div>
-
-              <p><a href="#" onClick={this.toggleForm}>Or start from scratch</a></p>
+            <div className="form-group">
+              <textarea id="form-data"
+                        name="form-data"
+                        className="form-control"
+                        rows="15"
+                        ref={node => { this.state.formData = node; }}>
+              </textarea>
             </div>
+
+            <div className="form-group">
+              <button type="submit" className="btn btn-success">Create form</button>
+            </div>
+
+            <p><a href="#" onClick={this.toggleForm}>Or start from scratch</a></p>
           </form>
         </div>
       </div>

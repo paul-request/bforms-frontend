@@ -67,8 +67,9 @@ class Section extends FormComponent {
 }
 
 const mapStateToProps = (state, { id }) => {
-  console.log('SECTION MSTP', id)
   const formId = getCurrentFormId(state);
+
+  console.log('SECTION MSTP', id, formId)
 
   return {
     section: getSectionById(state, id),

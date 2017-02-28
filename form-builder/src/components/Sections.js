@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
 import React from 'react';
+import { withRouter } from 'react-router';
 import { getSectionsByFormId, getCurrentFormId } from '../reducers';
 import Section from './Section';
 
@@ -14,15 +15,15 @@ const Sections = ({ sections }) => (
 
 const mapStateToProps = (state) => {
   const formId = getCurrentFormId(state);
-  console.log('SECTIONS MSTP', formId)
+
   return {
     sections: getSectionsByFormId(state, formId),
     formId,
   };
 };
 
-const SectionsContainer = connect(
+const SectionsContainer = withRouter(connect(
   mapStateToProps,
-)(Sections);
+)(Sections));
 
 export default SectionsContainer;

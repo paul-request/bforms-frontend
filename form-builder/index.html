@@ -8,109 +8,13 @@
 
   <title>Generated Form Builder</title>
 
-  <link href="/static/govuk-template.css" media="screen" rel="stylesheet">
-  <link href="/static/govuk-template-print.css" media="print" rel="stylesheet">
-  <link href="/static/fonts.css" media="all" rel="stylesheet">
-  <link href="/static/dropzone.css" media="screen" rel="stylesheet" type="text/css">
-  <link href="/static/application.css" media="screen" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css">
+  <link href="/static/index.css" media="screen" rel="stylesheet" type="text/css" />
 </head>
 
-<body class="js-enabled">
-  <script>
-  document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');
-  </script>
-
-  <svg style="position: absolute; width: 0; height: 0; overflow: hidden;" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <defs>
-      <symbol id="icon-plus" viewBox="0 0 32 32">
-        <title>plus</title>
-        <path d="M31 12h-11v-11c0-0.552-0.448-1-1-1h-6c-0.552 0-1 0.448-1 1v11h-11c-0.552 0-1 0.448-1 1v6c0 0.552 0.448 1 1 1h11v11c0 0.552 0.448 1 1 1h6c0.552 0 1-0.448 1-1v-11h11c0.552 0 1-0.448 1-1v-6c0-0.552-0.448-1-1-1z"></path>
-      </symbol>
-      <symbol id="icon-delete" viewBox="0 0 32 32">
-        <title>delete</title>
-        <path d="M31.708 25.708c-0-0-0-0-0-0l-9.708-9.708 9.708-9.708c0-0 0-0 0-0 0.105-0.105 0.18-0.227 0.229-0.357 0.133-0.356 0.057-0.771-0.229-1.057l-4.586-4.586c-0.286-0.286-0.702-0.361-1.057-0.229-0.13 0.048-0.252 0.124-0.357 0.228 0 0-0 0-0 0l-9.708 9.708-9.708-9.708c-0-0-0-0-0-0-0.105-0.104-0.227-0.18-0.357-0.228-0.356-0.133-0.771-0.057-1.057 0.229l-4.586 4.586c-0.286 0.286-0.361 0.702-0.229 1.057 0.049 0.13 0.124 0.252 0.229 0.357 0 0 0 0 0 0l9.708 9.708-9.708 9.708c-0 0-0 0-0 0-0.104 0.105-0.18 0.227-0.229 0.357-0.133 0.355-0.057 0.771 0.229 1.057l4.586 4.586c0.286 0.286 0.702 0.361 1.057 0.229 0.13-0.049 0.252-0.124 0.357-0.229 0-0 0-0 0-0l9.708-9.708 9.708 9.708c0 0 0 0 0 0 0.105 0.105 0.227 0.18 0.357 0.229 0.356 0.133 0.771 0.057 1.057-0.229l4.586-4.586c0.286-0.286 0.362-0.702 0.229-1.057-0.049-0.13-0.124-0.252-0.229-0.357z"></path>
-</symbol>
-      </symbol>
-    </defs>
-  </svg>
-
-
-  <div id="skiplink-container">
-    <div>
-      <a class="skiplink" href="/#content">Skip to main content</a>
-    </div>
-  </div>
-
-  <div id="global-cookie-message">
-    <p>GOV.UK uses cookies to make the site simpler. <a href="/">Find out more about cookies</a></p>
-  </div>
-
-  <header class="with-proposition" id="global-header" role="banner">
-    <div class="header-wrapper">
-      <div class="header-global">
-        <div class="header-logo">
-          <a class="content" href="https://www.gov.uk/" id="logo" title="Go to the GOV.UK homepage"><img alt="" height="32" src="/static/gov.uk_logotype_crown_invert_trans.png" width="36"> GOV.UK</a>
-        </div>
-      </div>
-      <div class="header-proposition">
-        <div class="content">
-          <a class="js-header-toggle menu" href="https://eeitt-ipt100.herokuapp.com/#proposition-links">Menu</a>
-          <nav id="proposition-menu">
-            <a href="https://eeitt-ipt100.herokuapp.com/" id="proposition-name">Generated Form Builder</a>
-          </nav>
-        </div>
-      </div>
-    </div>
-  </header>
-
-  <div id="global-header-bar"></div>
-
-  <main id="content" role="main">
-    <div class="grid-row">
-      <div class="column-full">
-        <div id="app-root"></div>
-      </div>
-    </div>
-  </main>
-
-  <footer class="group js-footer" id="footer" role="contentinfo">
-    <div class="footer-wrapper">
-      <div class="footer-meta">
-        <div class="footer-meta-inner">
-          <div class="open-government-licence">
-            <p class="logo"><a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" rel="license">Open Government Licence</a></p>
-            <p>All content is available under the <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" rel="license">Open Government Licence v3.0</a>, except where otherwise stated</p>
-          </div>
-        </div>
-        <div class="copyright">
-          <a href="http://www.nationalarchives.gov.uk/information-management/re-using-public-sector-information/copyright-and-re-use/crown-copyright/">© Crown copyright</a>
-        </div>
-      </div>
-    </div>
-  </footer>
-
-  <div class="app-error hidden" id="global-app-error"></div>
-  <script src="/static/govuk-template.js">
-  </script> <!-- Javascript -->
-  <script src="/static/dropzone.js">
-  </script>
-  <script src="/static/details.polyfill.js">
-  </script>
-  <script src="/static/jquery-1.11.3.js">
-  </script>
-  <script src="/static/selection-buttons.js">
-  </script>
-  <script src="/static/shim-links-with-button-role.js">
-  </script>
-  <script src="/static/show-hide-content.js">
-  </script>
-  <script src="/static/application.js">
-  </script> <!-- GOV.UK Prototype kit v5.1.0 -->
+<body>
+  <div id="app-root"></div>
 
   <script src="/static/bundle.js"></script>
-
-  <script>
-  if (typeof window.GOVUK === 'undefined') document.body.className = document.body.className.replace('js-enabled', '');
-  </script>
 </body>
 </html>

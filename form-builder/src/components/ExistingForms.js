@@ -6,16 +6,20 @@ import { getForms } from '../reducers';
 const ExistingForms = ({ forms }) => {
   if (forms.length) {
     return (
-      <div className="section">
-        <h2 className="heading-small">Existing forms</h2>
+      <div>
+        <div className="alert alert-info" role="alert">
+          <strong>We found <span className="label label-pill label-primary">{forms.length}</span> unsaved forms</strong> which you can continue editing below
+        </div>
 
-        <ul className="slat-container">
-        {forms.map(form =>
-          <li className="slat" key={form.formTypeId}>
-            <FormLink formId={form.formTypeId} />
-          </li>
-        )}
-        </ul>
+        <div className="panel panel-default">
+          <ul className="list-group">
+          {forms.map(form =>
+            <li className="list-group-item" key={form.formTypeId}>
+              <FormLink formId={form.formTypeId} />
+            </li>
+          )}
+          </ul>
+        </div>
       </div>
     );
   }
@@ -24,7 +28,7 @@ const ExistingForms = ({ forms }) => {
 }
 
 ExistingForms.propTypes = {
-  forms: PropTypes.func,
+  forms: PropTypes.array,
 };
 
 const mapStateToProps = (state) => {

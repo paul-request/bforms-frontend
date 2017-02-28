@@ -37,17 +37,18 @@
     "webpack-dev-server": "^1.14.0"
   },
   "dependencies": {
+    "assets-frontend": "hmrc/assets-frontend",
     "babel-polyfill": "^6.3.14",
     "babel-preset-stage-1": "^6.1.18",
+    "govuk-elements-sass": "2.2.1",
+    "govuk_frontend_toolkit": "5.0.2",
     "lodash": "^4.11.2",
     "node-uuid": "^1.4.7",
     "react": "^15.0.2",
     "react-dom": "^15.0.2",
+    "react-frame-component": "^1.0.1",
     "react-redux": "^4.4.5",
     "react-router": "^3.0.0",
-    "redux": "^3.5.2",
-    "govuk-elements-sass": "2.2.1",
-    "govuk_frontend_toolkit": "5.0.2",
-    "assets-frontend": "hmrc/assets-frontend"
+    "redux": "^3.5.2"
   }
 }

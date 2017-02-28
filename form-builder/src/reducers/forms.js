@@ -4,6 +4,7 @@ import { removeItemFromArray } from '../utils';
 import {
   ADD_FORM,
   IMPORT_FORM,
+  LOAD_FORM,
   ADD_SECTION,
   REMOVE_SECTION,
 } from '../constants/actionTypes';
@@ -63,6 +64,9 @@ const current = (state = {}, action) => {
   switch (action.type) {
     case ADD_FORM:
     case IMPORT_FORM:
+      return payload.form.formTypeId;
+    case LOAD_FORM:
+      console.log('!!!!!!!!!!!!! LOAD FORM !!!!!!!!!!!')
       return payload.form.formTypeId;
     default:
       return state;

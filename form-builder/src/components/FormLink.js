@@ -5,15 +5,15 @@ import { Link } from 'react-router';
 
 const FormLink = ({ form }) => {
   return (
-    <div className="grid-row">
-      <div className="column-two-thirds">
-        <h3 className="slat__title">{form.formName}</h3>
-        <p className="slat__desc">{form.description}</p>
+    <div className="row">
+      <div className="col-xs-8">
+        <h3 className="list-group-item-heading">{form.formName}</h3>
+        <p className="list-group-item-text">{form.description}</p>
       </div>
 
-      <div className="column-one-third">
-        <div className="slat__actions">
-          <Link className="button" to={`/form-builder/${form.formTypeId}`}>Edit</Link>
+      <div className="col-xs-4">
+        <div className="slat__actions text-right">
+          <Link className="btn btn-primary" to={`/form-builder/${form.formTypeId}`}>Edit</Link>
         </div>
       </div>
     </div>

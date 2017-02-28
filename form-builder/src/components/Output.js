@@ -1,17 +1,23 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import { getDenormalisedForm } from '../reducers';
+import { getDenormalisedForm, getCurrentFormId } from '../reducers';
 
 const Output = ({ form }) => (
-  <pre className="form-builder__output">
-    {JSON.stringify(form, null, 2)}
-  </pre>
+  <div className="panel panel-default">
+    <div className="panel-body">
+      <pre>
+        {JSON.stringify(form, null, 2)}
+      </pre>
+    </div>
+  </div>
 );
 
-const mapStateToProps = (state, { params }) => {
+const mapStateToProps = (state) => {
+  const formId = getCurrentFormId(state);
+
   return {
-    form: getDenormalisedForm(state, params.formId),
+    form: getDenormalisedForm(state, formId),
   };
 };
 

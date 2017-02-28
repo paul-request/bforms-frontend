@@ -1,5 +1,6 @@
 export const ADD_FORM = 'ADD_FORM';
 export const IMPORT_FORM = 'IMPORT_FORM';
+export const LOAD_FORM = 'LOAD_FORM';
 
 export const ADD_SECTION = 'ADD_SECTION';
 export const REMOVE_SECTION = 'REMOVE_SECTION';
