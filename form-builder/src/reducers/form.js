@@ -2,6 +2,7 @@ import {
   ADD_FORM,
   IMPORT_FORM,
   UPDATE_FORM,
+  REMOVE_FORM,
 } from '../constants/actionTypes';
 
 const initialState = {
@@ -12,30 +13,31 @@ const initialState = {
   sections: [],
 };
 
-// TODO: Do I need this, what is it doind that forms.js isn't????
+// TODO: Just get the sections from the props and ..rest, so taht we just
+// copy over all props// then choose what to do with sections in the reducers
 const form = (state = initialState, action) => {
   const { payload } = action;
-  const { formTypeId, formName, description } = payload.form;
+  const { sections = [], ...rest } = payload.form;
 
   switch (action.type) {
     case ADD_FORM:
       return {
         ...state,
-        formTypeId,
-        formName,
-        description,
+        ...rest,
       };
     case IMPORT_FORM:
-    case UPDATE_FORM:
-      const { sections = [] } = payload.form;
       const sectionIds = sections.map(section => section.id);
 
       return {
         ...state,
-        formTypeId,
-        formName,
-        description,
+        ...rest,
         sections: sectionIds,
+      };
+    case UPDATE_FORM:
+      return {
+        ...state,
+        ...rest,
+        sections,
       };
     default:
       return state;

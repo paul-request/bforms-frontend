@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux';
 import field from './field';
+import { getSectionsByFormId } from './index';
 import {
   removeKeysFromObject,
   removeKeyFromObject,
@@ -7,6 +8,7 @@ import {
   removeItemFromArray
 } from '../utils';
 import {
+  REMOVE_FORM,
   REMOVE_SECTION,
   ADD_FIELD,
   IMPORT_FIELD,
@@ -30,6 +32,9 @@ const byId = (state = {}, action) => {
         ...state,
         [payload.field.id]: field(state[payload.field.id], action),
       };
+    case REMOVE_FORM:
+      console.log('FIELDS REDUCER: BYID REMOVE_FORM', state, action)
+      return removeKeysFromObject(payload.fieldIds, state);
     default:
       return state;
   }
@@ -48,6 +53,9 @@ const allIds = (state = [], action) => {
     case IMPORT_FIELD:
     case ADD_FIELD:
       return [...state, payload.field.id];
+    case REMOVE_FORM:
+      console.log('FIELDS REDUCER: ALLIDS REMOVE_FORM', state, action)
+      return removeItemsFromArray(payload.fieldIds, state);
     default:
       return state;
   }

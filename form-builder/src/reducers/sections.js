@@ -1,7 +1,13 @@
 import { combineReducers } from 'redux';
 import section from './section';
-import { removeKeyFromObject, removeItemFromArray } from '../utils';
 import {
+  removeKeyFromObject,
+  removeKeysFromObject,
+  removeItemFromArray,
+  removeItemsFromArray
+} from '../utils';
+import {
+  REMOVE_FORM,
   ADD_SECTION,
   IMPORT_SECTION,
   REMOVE_SECTION,
@@ -12,8 +18,6 @@ import {
 
 const byId = (state = {}, action) => {
   const { payload } = action;
-
-  console.log('SECTIONS: STATE:', state, action)
 
   switch (action.type) {
     case REMOVE_SECTION:
@@ -46,6 +50,9 @@ const byId = (state = {}, action) => {
           fields: removeItemFromArray(payload.field.id, state[payload.sectionId].fields),
         }
       };
+    case REMOVE_FORM:
+      console.log('SECTIONS REDUCER: BYID REMOVE_FORM', state, action)
+      return removeKeysFromObject(payload.sectionIds, state);
     default:
       return state;
   }
@@ -60,6 +67,9 @@ const allIds = (state = [], action) => {
     case IMPORT_SECTION:
     case ADD_SECTION:
       return [...state, payload.section.id];
+    case REMOVE_FORM:
+      console.log('SECTIONS REDUCER: ALLIDS REMOVE_FORM', state, action)
+      return removeItemsFromArray(payload.sectionIds, state);
     default:
       return state;
   }

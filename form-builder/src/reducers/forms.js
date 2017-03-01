@@ -1,11 +1,15 @@
 import { combineReducers } from 'redux';
 import form from './form';
-import { removeItemFromArray } from '../utils';
+import {
+  removeItemFromArray,
+  removeKeyFromObject,
+} from '../utils';
 import {
   ADD_FORM,
   IMPORT_FORM,
   LOAD_FORM,
   UPDATE_FORM,
+  REMOVE_FORM,
   ADD_SECTION,
   REMOVE_SECTION,
 } from '../constants/actionTypes';
@@ -22,6 +26,9 @@ const byId = (state = {}, action) => {
         ...state,
         [payload.form.formTypeId]: form(state[action.id], action),
       };
+    case REMOVE_FORM:
+      console.log('FORMS REDUCER: REMOVE_FORM', state, action)
+      return removeKeyFromObject(payload.formId, state);
     case ADD_SECTION:
       console.log('ADD SECTION payload', state, payload)
       const sectionForm = state[payload.formId];
@@ -55,6 +62,8 @@ const allIds = (state = [], action) => {
     case ADD_FORM:
     case IMPORT_FORM:
       return [...state, payload.form.formTypeId];
+    case REMOVE_FORM:
+      return removeItemFromArray(payload.formId, state);
     default:
       return state;
   }
@@ -66,9 +75,7 @@ const current = (state = {}, action) => {
   switch (action.type) {
     case ADD_FORM:
     case IMPORT_FORM:
-      return payload.form.formTypeId;
     case LOAD_FORM:
-      console.log('!!!!!!!!!!!!! LOAD FORM !!!!!!!!!!!')
       return payload.form.formTypeId;
     default:
       return state;
