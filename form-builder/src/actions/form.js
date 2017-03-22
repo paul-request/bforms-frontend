@@ -8,6 +8,24 @@ import {
 } from '../constants/actionTypes';
 import { mapObjWithId } from './utils';
 
+const mapFormWithIds = (form) => {
+  if (form.sections) {
+    const sections = form.sections.map(section => {
+      const mappedSection = mapObjWithId(section, section.id);
+
+      if (section.fields) {
+        mappedSection.fields = section.fields.map(field => mapObjWithId(field, field.id));
+      }
+
+      return mappedSection;
+    });
+
+    return mapObjWithId({ ...form, sections }, form.formTypeId);
+  }
+
+  return mapObjWithId({ ...form }, form.formTypeId);
+};
+
 const getFormAction = (type, form) => ({
   type,
   payload: {
@@ -23,29 +41,9 @@ export const createForm = (formData) => {
 };
 
 export const importForm = (formData) => {
-  const mapFormWithIds = (form) => {
-    if (form.sections) {
-      const sections = form.sections.map(section => {
-        const mappedSection = mapObjWithId(section, section.id);
-
-        if (section.fields) {
-          mappedSection.fields = section.fields.map(field => mapObjWithId(field, field.id));
-        }
-
-        return mappedSection;
-      });
-
-      return mapObjWithId({ ...form, sections }, form.formTypeId);
-    }
-
-    return mapObjWithId({ ...form }, form.formTypeId);
-  };
-
   console.log('TEST FORM DATA', formData)
   const mappedformData = mapFormWithIds(formData);
-
   console.log('MAPPE FORM DATA !!!!!!!!!!!!', mappedformData)
-
   return getFormAction(IMPORT_FORM, mappedformData);
 };
 
@@ -55,7 +53,7 @@ export const loadForm = (formTypeId) => {
   });
 }
 
-export const updateForm = (form, newProps) => {
+export const updateForm = (form, newProps = {}) => {
   return getFormAction(UPDATE_FORM, {
     ...form,
     ...newProps,
@@ -77,7 +75,4 @@ export const removeForm = (formId, sections) => {
       fieldIds,
     },
   };
-  // return getFormAction(REMOVE_FORM, {
-  //   ...form,
-  // });
 }

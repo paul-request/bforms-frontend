@@ -1,17 +1,52 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
+import { updateForm } from '../actions';
 import { getDenormalisedForm, getCurrentFormId } from '../reducers';
 
-const Output = ({ form }) => (
-  <div className="panel panel-default">
-    <div className="panel-body">
-      <pre>
-        {JSON.stringify(form, null, 2)}
-      </pre>
-    </div>
-  </div>
-);
+class Output extends Component {
+  constructor(props) {
+    super(props);
+
+    const form = { ...props.form };
+    const formOutput = JSON.stringify(form, null, 2);
+
+    this.state = {
+      output: formOutput,
+      updated: false,
+    };
+  }
+
+  onChange = (event) => {
+    console.log('UPDATED OUTPUT', event.target.value)
+    this.setState({
+      output: event.target.value,
+      updated: true,
+    });
+  }
+
+  render() {
+    return (
+      <div className="form-builder__output">
+        <div className="form-group">
+          <textarea rows="25"
+                    className="form-builder__output-editor"
+                    onChange={this.onChange}
+                    value={this.state.output}>
+          </textarea>
+        </div>
+
+        <div className="form-group">
+          <button className="btn btn-primary"
+                  onClick={() => this.props.onHandleFormChange(this.state.output)}
+                  disabled={!this.state.updated}>
+            Save changes
+          </button>
+        </div>
+      </div>
+    )
+  }
+}
 
 const mapStateToProps = (state) => {
   const formId = getCurrentFormId(state);
@@ -23,6 +58,9 @@ const mapStateToProps = (state) => {
 
 const OutputContainer = withRouter(connect(
   mapStateToProps,
+  {
+    onHandleFormChange: updateForm,
+  }
 )(Output));
 
 export default OutputContainer;
