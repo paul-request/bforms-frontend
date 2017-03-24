@@ -26,13 +26,6 @@ const form = (state = initialState, action) => {
         ...rest,
       };
     case IMPORT_FORM:
-      const sectionIds = sections.map(section => section.id);
-
-      return {
-        ...state,
-        ...rest,
-        sections: sectionIds,
-      };
     case UPDATE_FORM:
       return {
         ...state,

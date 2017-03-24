@@ -1,6 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
-import { createForm, importForm, importSection, importField } from '../actions';
+import { createForm, importForm } from '../actions';
 import { browserHistory } from 'react-router';
 
 class AddForm extends Component {
@@ -46,37 +46,18 @@ class AddForm extends Component {
     event.preventDefault();
 
     const { formData } = this.state;
-    const hasData = formData.value;
 
-    if (!hasData) return;
+    if (!formData.value) return;
 
     // TODO: handle invalid JSON with try catch and return an error to display to the user?
     // Need to work out a good way to do this...
     // Maybe some sort of overall validation on submit?
 
-    // if isValid, else add error and display somehow. Look it up
-    // Actually need to go through, chec k the structure and use correct JSON format here
     const data = JSON.parse(formData.value);
-    const action = importForm(data);
+    const importFormAction = importForm(data);
 
-    this.props.dispatch(action);
-
-    // TODO: Is there a better place to put this, perhaps in reducer index?
-    if (action.payload.form.sections) {
-      action.payload.form.sections.forEach(section => {
-        const importSectionAction = importSection(action.payload.form.formTypeId, section);
-        this.props.dispatch(importSectionAction);
-
-        if (section.fields) {
-          section.fields.forEach(field => {
-            const importFieldAction = importField(importSectionAction.payload.section.id, field);
-            this.props.dispatch(importFieldAction);
-          });
-        }
-      });
-    }
-
-    browserHistory.push(`/form-builder/${action.payload.form.formTypeId}`);
+    this.props.dispatch(importFormAction);
+    browserHistory.push(`/form-builder/${importFormAction.payload.form.formTypeId}`);
   }
 
   render() {

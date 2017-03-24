@@ -42,10 +42,11 @@ export const getDenormalisedForm = (state, formId) => {
   const form = getFormById(state, formId);
   const formSections = getSectionsByFormId(state, formId);
   const sections = formSections.map(section => {
-    const { id, ...outputSection } = section;
+    // Keep the Id now
+    // const { id, ...outputSection } = section;
 
     return {
-      ...outputSection,
+      ...section,
       fields: getFieldsBySectionId(state, section.id),
     }
   });

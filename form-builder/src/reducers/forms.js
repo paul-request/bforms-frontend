@@ -35,7 +35,7 @@ const byId = (state = {}, action) => {
 
       return {
         ...state,
-        [payload.formId] : {
+        [payload.formId]: {
           ...sectionForm,
           sections: sectionForm.sections.concat(payload.section.id),
         }
@@ -45,7 +45,7 @@ const byId = (state = {}, action) => {
 
       return {
         ...state,
-        [payload.formId] : {
+        [payload.formId]: {
           ...parentForm,
           sections: removeItemFromArray(payload.section.id, state[payload.formId].sections),
         }
@@ -61,7 +61,8 @@ const allIds = (state = [], action) => {
   switch (action.type) {
     case ADD_FORM:
     case IMPORT_FORM:
-      return [...state, payload.form.formTypeId];
+      // Set removes duplicates, just a shorter way of merging and filtering
+      return [...new Set([...state, payload.form.formTypeId])];
     case REMOVE_FORM:
       return removeItemFromArray(payload.formId, state);
     default:

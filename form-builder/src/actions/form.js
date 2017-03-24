@@ -44,7 +44,42 @@ export const importForm = (formData) => {
   console.log('TEST FORM DATA', formData)
   const mappedformData = mapFormWithIds(formData);
   console.log('MAPPE FORM DATA !!!!!!!!!!!!', mappedformData)
-  return getFormAction(IMPORT_FORM, mappedformData);
+
+  const fields = {};
+  const sections = {};
+
+  const { sections: formSections, ...importedForm } = mappedformData;
+
+  const form = {
+    ...importedForm,
+    sections: formSections.map(section => section.id),
+  };
+
+  formSections.forEach(({ fields: sectionFields, ...section })  => {
+    const fieldIds = sectionFields.map(field => field.id);
+
+    sections[section.id] = {
+      ...section,
+      fields: fieldIds,
+    };
+
+    sectionFields.forEach(field => {
+      fields[field.id] = {
+        ...field,
+      };
+    });
+  });
+
+  console.log('IMPORT FORM< OBJ', form, sections, fields)
+
+  return {
+    type: IMPORT_FORM,
+    payload: {
+      form,
+      sections,
+      fields,
+    },
+  };
 };
 
 export const loadForm = (formTypeId) => {

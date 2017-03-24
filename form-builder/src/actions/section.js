@@ -1,7 +1,6 @@
 import { v4 } from 'node-uuid';
 import {
   ADD_SECTION,
-  IMPORT_SECTION,
   REMOVE_SECTION,
   UPDATE_SECTION,
 } from '../constants/actionTypes';
@@ -14,11 +13,6 @@ const getSectionAction = (type, section, formId) =>({
     formId,
   },
 });
-
-export const importSection = (formId, section = getDefaultObj()) => {
-  console.log('ACTION: EDITSECTION', section, formId)
-  return getSectionAction(IMPORT_SECTION, section, formId);
-};
 
 export const createSection = (formId, section = getDefaultObj()) => {
   console.log('addSEction', section, formId)

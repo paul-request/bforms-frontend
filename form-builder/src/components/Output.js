@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import { updateForm } from '../actions';
+import { importForm } from '../actions';
 import { getDenormalisedForm, getCurrentFormId } from '../reducers';
 
 class Output extends Component {
@@ -38,7 +38,7 @@ class Output extends Component {
 
         <div className="form-group">
           <button className="btn btn-primary"
-                  onClick={() => this.props.onHandleFormChange(this.state.output)}
+                  onClick={() => this.props.onHandleFormChange(JSON.parse(this.state.output))}
                   disabled={!this.state.updated}>
             Save changes
           </button>
@@ -59,7 +59,7 @@ const mapStateToProps = (state) => {
 const OutputContainer = withRouter(connect(
   mapStateToProps,
   {
-    onHandleFormChange: updateForm,
+    onHandleFormChange: importForm,
   }
 )(Output));
 

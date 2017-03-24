@@ -1,6 +1,5 @@
 import {
   ADD_FIELD,
-  IMPORT_FIELD,
   UPDATE_FIELD
 } from '../constants/actionTypes';
 
@@ -18,7 +17,6 @@ const field = (state = initialState, action) => {
   console.log('FIELD REDUCER: FIELD', state, action)
 
   switch (action.type) {
-    case IMPORT_FIELD:
     case ADD_FIELD:
     case UPDATE_FIELD:
       return {

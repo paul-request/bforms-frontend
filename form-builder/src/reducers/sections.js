@@ -7,9 +7,9 @@ import {
   removeItemsFromArray
 } from '../utils';
 import {
+  IMPORT_FORM,
   REMOVE_FORM,
   ADD_SECTION,
-  IMPORT_SECTION,
   REMOVE_SECTION,
   UPDATE_SECTION,
   ADD_FIELD,
@@ -22,12 +22,19 @@ const byId = (state = {}, action) => {
   switch (action.type) {
     case REMOVE_SECTION:
       return removeKeyFromObject(payload.section.id, state);
-    case IMPORT_SECTION:
     case ADD_SECTION:
     case UPDATE_SECTION:
       return {
         ...state,
         [payload.section.id]: section(state[payload.section.id], action),
+      };
+    case IMPORT_FORM:
+      console.log('IMPORT FORM: SECTIONS', state, payload);
+      const { sections } = payload;
+
+      return {
+        ...state,
+        ...sections,
       };
     case ADD_FIELD:
       const { field } = payload;
@@ -64,12 +71,13 @@ const allIds = (state = [], action) => {
   switch (action.type) {
     case REMOVE_SECTION:
       return removeItemFromArray(payload.section.id, state);
-    case IMPORT_SECTION:
     case ADD_SECTION:
       return [...state, payload.section.id];
     case REMOVE_FORM:
       console.log('SECTIONS REDUCER: ALLIDS REMOVE_FORM', state, action)
       return removeItemsFromArray(payload.sectionIds, state);
+    case IMPORT_FORM:
+      return [ ...Object.keys(payload.sections) ];
     default:
       return state;
   }

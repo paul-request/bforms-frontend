@@ -1,7 +1,6 @@
 import { v4 } from 'node-uuid';
 import {
   ADD_FIELD,
-  IMPORT_FIELD,
   REMOVE_FIELD,
   UPDATE_FIELD,
 } from '../constants/actionTypes';
@@ -14,10 +13,6 @@ const getFieldAction = (type, field, sectionId) =>({
     sectionId,
   },
 });
-
-export const importField = (sectionId, field = getDefaultObj()) => {
-  return getFieldAction(IMPORT_FIELD, field, sectionId);
-};
 
 export const createField = (sectionId, field = getDefaultObj()) => {
   console.log('CTREATE FIELD ACTION', field, sectionId)
