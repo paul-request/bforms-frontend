@@ -41,15 +41,23 @@ export const getFieldsBySectionId = (state, id) => {
 export const getDenormalisedForm = (state, formId) => {
   const form = getFormById(state, formId);
   const formSections = getSectionsByFormId(state, formId);
+
+  console.log('IN getDenormalisedForm: FORM SECTIONS', formSections)
   const sections = formSections.map(section => {
     // Keep the Id now
     // const { id, ...outputSection } = section;
+
 
     return {
       ...section,
       fields: getFieldsBySectionId(state, section.id),
     }
   });
+
+  console.log('IN getDenormalisedForm: SECTIONS', form, sections, {
+    ...form,
+    sections,
+  })
 
   return {
     ...form,

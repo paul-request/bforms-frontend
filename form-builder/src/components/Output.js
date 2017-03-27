@@ -8,17 +8,20 @@ class Output extends Component {
   constructor(props) {
     super(props);
 
-    const form = { ...props.form };
-    const formOutput = JSON.stringify(form, null, 2);
-
     this.state = {
-      output: formOutput,
+      output: JSON.stringify(props.form, null, 2),
       updated: false,
     };
   }
 
+  componentWillReceiveProps = (nextProps) => {
+    this.setState({
+      output: JSON.stringify(nextProps.form, null, 2),
+      updated: false,
+    });
+  }
+
   onChange = (event) => {
-    console.log('UPDATED OUTPUT', event.target.value)
     this.setState({
       output: event.target.value,
       updated: true,
