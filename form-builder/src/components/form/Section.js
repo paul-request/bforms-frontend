@@ -19,7 +19,7 @@ class Section extends FormComponent {
       formId,
       section,
       onRemoveSectionClick,
-      onAddFieldClick
+      onAddFieldClick,
     } = this.props;
 
     return (

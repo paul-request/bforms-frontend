@@ -1,4 +1,6 @@
+@import 'colours';
 @import 'icon';
+@import 'page-break';
 
 .form-builder__component {
   position: relative;
@@ -25,9 +27,9 @@
     visibility: hidden;
 
     .button {
-      background: #28A197;
+      background: $colour-primary;
       color: #fff;
-      border: 1px solid #28A197;
+      border: 1px solid $colour-primary;
       border-radius: 3px;
       float: none;
       display: block;
@@ -36,8 +38,8 @@
     }
 
     .button--danger {
-      background: #B10E1E;
-      border: 1px solid #B10E1E;
+      background: $colour-danger;
+      border: 1px solid $colour-danger;
     }
 
     .button--icon {

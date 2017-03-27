@@ -1,0 +1,18 @@
+@import 'colours';
+
+.form-builder__page-break {
+  border-top: 1px dashed $page-break-colour;
+  color: $page-break-colour;
+  font-size: 11px;
+  font-family: Arial, Helvetica, sans-serif;
+  text-align: center;
+}
+
+.form-builder__page-break-number {
+  background: $white;
+  display: inline-block;
+  padding: 3px;
+  position: relative;
+  top: -12px;
+  margin: 0 auto;
+}

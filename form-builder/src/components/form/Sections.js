@@ -6,10 +6,17 @@ import Section from './Section';
 
 const Sections = ({ sections }) => (
   <div>
-    {sections.map(section =>
-      <Section key={section.id}
-               id={section.id} />
-    )}
+    {sections.map((section, index) => (
+      <div key={section.id}>
+        <Section id={section.id} />
+
+        <div className="form-builder__page-break">
+          <span className="form-builder__page-break-number">
+            Page { index + 1 }
+          </span>
+        </div>
+      </div>
+    ))}
   </div>
 );
 
